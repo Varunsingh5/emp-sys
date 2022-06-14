@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import './App.css'
+import { Routes, Route, Link } from 'react-router-dom'
+
+
+import UserLogin from "./components/Login/UserLogin";
+// import SignUp from './components/signup.component'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+        <div className="container">
+          <Link className="navbar-brand" to={'/sign-in'}>
+            Squadminds Pvt. Ltd.
+          </Link>
+          <div >
+          
+          </div>
+        </div>
+      </nav>
+      <Routes>
+        
+        <Route path="/user" element={<UserLogin />} />
+      </Routes>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
