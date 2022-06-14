@@ -84,8 +84,9 @@ const UserLogin = () => {
               // type={true?"password":"text"}
               name="password"
               className="form-control"
-              inputMode='text'
+              inputMode='password'
               placeholder="Enter password"
+              type="password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value)
