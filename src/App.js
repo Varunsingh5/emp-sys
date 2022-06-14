@@ -4,6 +4,7 @@ import './App.css'
 import { Routes, Route, Link } from 'react-router-dom'
 
 import AdminLogin from './components/Login/AdminLogin';
+import UserLogin from './components/Login/UserLogin';
 
 // import SignUp from './components/signup.component'
 
@@ -33,7 +34,8 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route exact path="/" element={<AdminLogin />} />
+        <Route exact path="/admin/login" element={<AdminLogin />} />
+        <Route exact path="/" element={<UserLogin />} />
         <Route path="/sign-in" element={<AdminLogin />} />
       
       </Routes>
