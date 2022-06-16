@@ -1,10 +1,16 @@
-import React from 'react'
+import React from 'react';
+import AdminSidebar from '../pages/Sidebar/AdminSidebar';
+
+
 
 const AdminDashboard = () => {
   return (
-    <div>
-      dashboard
-    </div>
+    <>
+      <div style={{ width: "30%" }}>
+        <AdminSidebar />
+      </div>
+
+    </>
   )
 }
 

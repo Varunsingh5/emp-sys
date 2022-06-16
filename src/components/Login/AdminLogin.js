@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
 
-import { auth, db } from "../../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { isEmpty, isUndefined } from "lodash";
+
+import { isEmpty, isUndefined } from "lodash"
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const [status, setStatus] = useState("Available");
+
+
 
   const validateLogin = () => {
     if (!isUndefined(email)) {
@@ -24,7 +30,6 @@ const AdminLogin = () => {
         setEmailError("");
       }
     }
-
     if (!isUndefined(password)) {
       if (isEmpty(password)) {
         setPasswordError("Password is a required field");
@@ -40,7 +45,8 @@ const AdminLogin = () => {
         setPasswordError("");
       }
     }
-  };
+
+  }
 
   useEffect(() => {
     validateLogin();
@@ -51,39 +57,46 @@ const AdminLogin = () => {
     try {
       console.log("sdljbnfgkjsdgsdkj", email, password);
       await signInWithEmailAndPassword(auth, email, password)
-        .then(async (e) => {
-          console.log(e);
-          localStorage.setItem("isAuth", "true");
-          localStorage.setItem("user", JSON.stringify(e?.user));
-          navigate("/admin/dashboard");
-        })
-        .catch((err) =>
-          console.log("catch error in login with email admin", err)
-        );
+
+        .then(async e => {
+          console.log(e)
+          localStorage.setItem('isAuth', 'true')
+          localStorage.setItem('user', JSON.stringify(e?.user))
+          navigate("/admin/users")
+        }).catch(err => alert("no email found", err))
+
     } catch (err) {
       console.error(err);
       alert(err.message);
     }
   };
+  const navigate = useNavigate();
+
+  const user = () => {
+    navigate("/")
+  }
 
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form>
+          <  ArrowBackIcon onClick={user} />
           <h3>Sign In</h3>
 
           <div className="mb-3">
             <label>Email address</label>
 
             <input
-              // type={"email"}
+              type="email"
               name="email"
               inputMode="text"
               className="form-control"
               placeholder="Enter email"
               value={email}
               onChange={(e) => {
-                setEmail(e.target.value);
+
+                setEmail(e.target.value)
+
               }}
             />
             <span className="text-danger">{emailError}</span>
@@ -92,7 +105,7 @@ const AdminLogin = () => {
           <div className="mb-3">
             <label>Password</label>
             <input
-              // type={true?"password":"text"}
+              type="password"
               name="password"
               className="form-control"
               inputMode="password"
