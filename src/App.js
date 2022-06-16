@@ -3,8 +3,10 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { Routes, Route, Link, Router } from 'react-router-dom'
 import AdminLogin from './components/Login/AdminLogin';
+
 import AdminDashboard from './components/Screens/Dashboard/AdminDashboard';
 import UserTable from './components/Screens/UserTable/UserTable';
+
 // import SignUp from './components/signup.component'
 import UserLogin from "../src/components/Login/UserLogin";
 // import PrivateRoute from './components/Routes/PrivateRoute';
@@ -28,6 +30,7 @@ function App() {
       </nav>
 
       <Routes>
+
 
 
         <Route exact path="/admin/login" element={<AdminLogin />} />
