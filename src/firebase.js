@@ -111,11 +111,23 @@ const sendPasswordReset = async (email, navigate) => {
     alert(err.message);
   }
 };
-const logout = async (history) => {
-  const currentRole = await localStorage.getItem("role");
+
+// const logout = async (navigate) => {
+//   const currentRole = await localStorage.getItem("role");
+//   localStorage.clear();
+//   await signOut(auth).then(e => {
+
+//   }).catch(err => console.log("signout error", err))
+
+// };
+
+
+
+const logout = async (navigate) => {
+  // const currentRole = await localStorage.getItem("role");
   localStorage.clear();
   await signOut(auth).then(e => {
-    // history.push(`/user`);
+     navigate(`/admin/login`);
   }).catch(err => console.log("signout error", err))
 
 };
