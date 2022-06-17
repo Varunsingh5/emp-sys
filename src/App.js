@@ -42,6 +42,7 @@ function App() {
         <Route path="/sign-in" element={<AdminLogin />} />
 
         <Route path="/" element={<UserLogin />} />
+        <Route path="/user/login" element={<UserLogin />} />
 
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
