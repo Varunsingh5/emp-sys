@@ -2,17 +2,10 @@ import React from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { Routes, Route, Link, Router } from 'react-router-dom'
-import AdminLogin from './components/Login/AdminLogin';
-
-import AdminDashboard from './components/Screens/Dashboard/AdminDashboard';
-import UserTable from './components/Screens/UserTable/UserTable';
-
 // import SignUp from './components/signup.component'
 import UserLogin from "../src/components/Login/UserLogin";
-// import PrivateRoute from './components/Routes/PrivateRoute';
-// import PublicRoute from './components/Routes/PublicRoute';
-// import SetPassword from './components/Login/setPassword';
-import SetPassword from "./components/Login/setPassword"
+import { UserAuthContextProvider } from "./components/context/UserAuthContext";
+import UserDashboard from './components/Screens/Dashboard/UserDashboard';
 
 function App() {
   return (
@@ -29,27 +22,35 @@ function App() {
         </div>
       </nav>
 
-      <Routes>
+      {/* <Routes>
 
-
+       
 
         <Route exact path="/admin/login" element={<AdminLogin />} />
 
-        <Route exact path="/user/login" element={<UserLogin />} />
 
         <Route exact path="/user/setPassword" element={<SetPassword />} />
 
         <Route path="/sign-in" element={<AdminLogin />} />
 
+
         <Route path="/" element={<UserLogin />} />
         <Route path="/user/login" element={<UserLogin />} />
 
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
+        <Route path="/" element={<UserLogin />} />
+        <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<UserTable />} />
 
 
-      </Routes>
+      </Routes>  */}
+       <UserAuthContextProvider>
+       <Routes>
+         <Route path="/user/dashboard" element={<UserDashboard />} />
+         <Route path="/" element={<UserLogin />} />
+       </Routes>
+     </UserAuthContextProvider>
 
 
     </div>

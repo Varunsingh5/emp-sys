@@ -1,5 +1,9 @@
+
+
+
 // import React, {  useState, } from "react";
 // // useEffect
+
 
 // import "react-phone-input-2/lib/style.css";
 // // import { useLocation } from "react-router-dom";
@@ -157,6 +161,7 @@
 
 import React, {  useEffect, useState, } from "react";
 import "react-phone-input-2/lib/style.css";
+
 import { useNavigate } from "react-router-dom";
 // import { useLocation } from "react-router-dom";
 import { doc, query,  } from "firebase/firestore";
@@ -174,9 +179,12 @@ import {  useLocation } from "react-router-dom";
 
 var CryptoJS = require("crypto-js");
 
+
 const SetPassword = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const location = useLocation();
 
 
   const [name, setName] = useState("");
@@ -283,7 +291,7 @@ const getDocument = async(decryptedData)=>{
       }
     
 
-  }
+
 
   return (
     <div className="auth-wrapper">
@@ -339,9 +347,11 @@ const getDocument = async(decryptedData)=>{
           <div className="d-grid">
             <button
               type='submit'
+
               className="btn btn-primary"
                 // onClick={submit}
                  >
+
               Submit
             </button>
           </div>

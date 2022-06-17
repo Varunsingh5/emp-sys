@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, } from "react";
 
 import "react-phone-input-2/lib/style.css";
@@ -45,6 +44,35 @@ const UserLogin = () => {
   // const { setUpRecaptha } = useUserAuth();
   const [result, setResult] = useState("");
 
+  const [phoneError, setPhoneError] = useState("");
+
+
+  const login = (e) => {
+    e.preventDefault();
+    // const q = query(collection(db, "userList"), where("isDeleted", "==", true), where("phone", "==", phone), where("email", "==", email));
+    // const querySnapshot = await getDocs(q);
+    try {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(async (e) => {
+          console.log(e);
+          localStorage.setItem("isAuth", "true");
+          localStorage.setItem("user", JSON.stringify(e?.user));
+          navigate("/user/dashboard");
+        })
+        .catch((err) => alert("catch error in login", err));
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  };
+
+
+  useEffect(() => {
+    const phone = location.search.substring(8)
+    console.log("location.search", window.atob(phone));
+    phone && setPhone(window.atob(phone))
+  }, [])
+
 
   // Validations
   const validateLogin = () => {
@@ -77,104 +105,36 @@ const UserLogin = () => {
 
   useEffect(() => {
     validateLogin();
-  }, [email, password, validateLogin]);
+  }, [email, password]);
 
+  // phone number validation
+  const validatePhone = () => {
+    if (!isUndefined(phone)) {
+      if (isEmpty(phone)) {
+        setPhoneError("Phone number is a required field")
+      }
+      else {
+        setPhoneError("")
+      }
+    }
+  };
+  useEffect(() => {
+    validatePhone();
+  }, [phone]);
 
-  // const verifyOtp = async (e) => {
-  // e.preventDefault();
-  // setError("Please enter a valid otp!");
-  // if (otp === "" || otp === null) return;
-  // try {
-  //   console.log("result", result);
-  //   await result
-  //     .confirm(otp)
-  //     .then(async (confirmationResult) => {
-  //       console.log("jdvfsdnhfjdshi", confirmationResult);
-  //       localStorage.setItem("isAuth", "true");
-  //       localStorage.setItem(
-  //         "user",
-  //         JSON.stringify(confirmationResult?.user)
-  //       );
-  //       localStorage.setItem("role", "user");
-  //       console.log("SSzfasfas", confirmationResult?.user);
-  //       const docRef = doc(db, "users", confirmationResult?.user?.uid);
-  //       const docSnap = await getDoc(docRef);
-  //       if (docSnap.exists()) {
-  //         localStorage.setItem("role", docSnap.data().role);
-  //         if (docSnap.data().role == "user") {
-  //         navigate("/user/dashboard");
-  //         }
-  //       } else {
-  //         await setDoc(docRef, {
-  //           uid: confirmationResult?.user?.uid,
-  //           name: "",
-  //           authProvider: confirmationResult?.providerId,
-  //           email: "",
-  //           onlineState: "",
-  //           role: "user",
-  //           isVerified: false,
-  //           created_at: moment.now(),
-  //         })
-  //           .then((e) => {
-  //             navigate("/user/dashboard");
-  //           })
-  //           .catch((error) =>
-  //             console.log("error on doc create phone signup", error)
-  //           );
-  //       }
-  //     })
-  //     .catch(async (err) => {
-  //       console.log("error in confirm otp", err);
-  //     });
-  // } catch (err) {
-  //   setError(err.message);
-  // }
-  // };
-  // const getOtp = async (e) => {
-  // e.preventDefault();
-  // console.log(number);
-  // setError("");
-  // if (number === "" || number === undefined)
-  //   return setError("Please enter a valid phone number!");
-  // try {
-  //   const response = await setUpRecaptha(number);
-  //   setResult(response);
-  //   setFlag(true);
-  // } catch (err) {
-  //   setError(err.message);
-  // }
-  // };
-
-  const getOtp = async (item) => {
-    // e.preventDefault();
+  const getOtp = async (e) => {
+    e.preventDefault();
     console.log(number);
     setError("");
-
-
-    const docRef = doc(db, "userList", item.id);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-
-      if (number === "" || number === undefined)
-        return setError("Please enter a valid phone number!");
-      try {
-        const response = await (number);
-        // setResult(response);
-        setFlag(true);
-      } catch (err) {
-        setError(err.message);
-      }
-
+    if (number === "" || number === undefined)
+      return setError("Please enter a valid phone number!");
+    try {
+      const response = await setUpRecaptha(number);
+      setResult(response);
+      setFlag(true);
+    } catch (err) {
+      setError(err.message);
     }
-
-    else {
-      alert("number does not exist")
-    }
-
-
-
-
 
   };
 
@@ -189,6 +149,10 @@ const UserLogin = () => {
       setError(err.message);
     }
   };
+
+
+  // if email and phone number exists
+  
 
   const login = async (e) => {
     e.preventDefault();
@@ -217,6 +181,7 @@ const UserLogin = () => {
     console.log("location.search", window.atob(phone));
     phone && setPhone(window.atob(phone))
   }, [])
+
 
   if (phoneLogin) {
     return (
@@ -296,28 +261,30 @@ const UserLogin = () => {
         </div>
       </div>
     );
-  } else {
+
+  }
+
+  else {
     return (
       <>
         <div className="p-4 box">
+
+          {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={getOtp} style={{ display: !flag ? "block" : "none" }}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <div className="phn" style={{ marginLeft: '40%', marginTop: "20%" }}   >
-                <PhoneInput
-                  defaultCountry="IN"
-                  value={number}
-                  onChange={setNumber}
-                  placeholder="Enter Phone Number"
-                />
-
-              </div>
-
+              <PhoneInput
+                defaultCountry="IN"
+                value={number}
+                onChange={setNumber}
+                placeholder="Enter Phone Number"
+              />
               <div id="recaptcha-container"></div>
             </Form.Group>
             <div className="button-right">
-              {/* <Link to="/"> */}
-              <Button variant="secondary">Cancel</Button>
-              {/* </Link> */}
+              <Link to="/">
+                <Button variant="secondary">Cancel</Button>
+              </Link>
+
               &nbsp;
               <Button type="submit" variant="primary">
                 Send Otp
@@ -328,14 +295,13 @@ const UserLogin = () => {
               style={{ textAlign: "center" }}
               onClick={() => setPhoneLogin(true)}
             >
-              Login with email and password
+
+              Login with Email and Password
             </p>
           </Form>
 
-          <Form
-            onSubmit={verifyOtp}
-            style={{ display: flag ? "block" : "none" }}
-          >
+          <Form onSubmit={verifyOtp} style={{ display: flag ? "block" : "none" }}>
+
             <Form.Group className="mb-3" controlId="formBasicOtp">
               <Form.Control
                 type="otp"
@@ -345,20 +311,24 @@ const UserLogin = () => {
             </Form.Group>
 
             <div className="button-right">
-              {/* <Link to="/"> */}
-              <Button variant="secondary">Cancel</Button>
-              {/* </Link> */}
+
+              <Link to="/">
+                <Button variant="secondary">Cancel</Button>
+              </Link>
+
               &nbsp;
               <Button type="submit" variant="primary">
                 Verify
               </Button>
             </div>
           </Form>
+
         </div>
       </>
     );
   }
 
+};
 
-}
-export default UserLogin
+export default UserLogin;
+
