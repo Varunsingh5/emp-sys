@@ -30,7 +30,7 @@ import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
 
 
-const AdminSidebar = () => {
+const UserSidebar = () => {
 
   const navigate = useNavigate();
 
@@ -73,11 +73,11 @@ const AdminSidebar = () => {
           <SidebarContent>
             <Menu iconShape="square">
               <MenuItem active={true} icon={<FiHome />}>
-                UserList
+                User Profile
               </MenuItem>
 
 
-              <MenuItem icon={<FaList />}>Profile</MenuItem>
+              <MenuItem icon={<FaList />}>Settings</MenuItem>
               {/* <Route path="/admin/users" exact component={UserTable} /> */}
 
               {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}
@@ -97,4 +97,4 @@ const AdminSidebar = () => {
     </>
   );
 };
-export default AdminSidebar;
+export default UserSidebar;

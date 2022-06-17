@@ -9,6 +9,7 @@ const AdminLayout = () => {
         <Router>
             <Routes>
             <Route path="/user/userProfile" exact component={UserProfile} />
+            <Route path="/user/setting" exact component={Setting} />
            
             </Routes>
        
