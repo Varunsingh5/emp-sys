@@ -4,7 +4,7 @@ import './App.css'
 import { Routes, Route, Link, Router } from 'react-router-dom'
 // import SignUp from './components/signup.component'
 import UserLogin from "../src/components/Login/UserLogin";
-import { UserAuthContextProvider } from "./components/context/UserAuthContext";
+import { UserAuthContextProvider } from "../src/components/Context/UserAuthContext";
 import UserDashboard from './components/Screens/Dashboard/UserDashboard';
 
 function App() {
@@ -45,12 +45,12 @@ function App() {
 
 
       </Routes>  */}
-       <UserAuthContextProvider>
-       <Routes>
-         <Route path="/user/dashboard" element={<UserDashboard />} />
-         <Route path="/" element={<UserLogin />} />
-       </Routes>
-     </UserAuthContextProvider>
+      <UserAuthContextProvider>
+        <Routes>
+          <Route path="/user/dashboard" element={<UserDashboard />} />
+          <Route path="/" element={<UserLogin />} />
+        </Routes>
+      </UserAuthContextProvider>
 
 
     </div>

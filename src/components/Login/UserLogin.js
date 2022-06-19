@@ -4,7 +4,7 @@ import "react-phone-input-2/lib/style.css";
 import { useLocation } from "react-router-dom";
 
 import validator from "validator";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { isEmpty, isUndefined } from "lodash";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -12,7 +12,7 @@ import { doc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { getDoc } from "firebase/firestore";
 import { query, collection, where, getDocs } from "firebase/firestore";
-
+import { Alert, } from "react-bootstrap"
 import { Button, } from "reactstrap";
 
 import { auth, } from "../../firebase";
@@ -22,6 +22,7 @@ import {
 // import "./UserLogin.css";
 
 import { Form } from "react-bootstrap";
+import { useUserAuth } from "../Context/UserAuthContext"
 
 const UserLogin = () => {
   const [email, setEmail] = useState();
@@ -41,13 +42,13 @@ const UserLogin = () => {
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
   // const [name, setName] = useState("");
-  // const { setUpRecaptha } = useUserAuth();
+  const { setUpRecaptha } = useUserAuth();
   const [result, setResult] = useState("");
 
   const [phoneError, setPhoneError] = useState("");
 
 
-  const login = (e) => {
+  const login1 = (e) => {
     e.preventDefault();
     // const q = query(collection(db, "userList"), where("isDeleted", "==", true), where("phone", "==", phone), where("email", "==", email));
     // const querySnapshot = await getDocs(q);
@@ -152,7 +153,7 @@ const UserLogin = () => {
 
 
   // if email and phone number exists
-  
+
 
   const login = async (e) => {
     e.preventDefault();
@@ -162,7 +163,7 @@ const UserLogin = () => {
       signInWithEmailAndPassword(auth, email, password)
         .then(async (e) => {
 
-          
+
           console.log(e);
           localStorage.setItem("isAuth", "true");
           localStorage.setItem("user", JSON.stringify(e?.user));
