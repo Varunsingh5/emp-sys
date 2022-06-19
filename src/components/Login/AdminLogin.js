@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import validator from 'validator';
+import React, { useState, useEffect } from "react";
+import validator from "validator";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "../../firebase";
@@ -23,44 +23,48 @@ const AdminLogin = () => {
 
     if (!isUndefined(email)) {
       if (isEmpty(email)) {
-        setEmailError("Email is a required field")
-      }
-      else if (!(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email))) {
-        setEmailError("Please enter valid email")
+        setEmailError("Email is a required field");
+      } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+        setEmailError("Please enter valid email");
       } else {
-        setEmailError("")
+        setEmailError("");
       }
     }
     if (!isUndefined(password)) {
       if (isEmpty(password)) {
-        setPasswordError("Password is a required field")
-      }
-      else if (!validator.isStrongPassword(password, {
-        minLength: 6,
-        minNumbers: 1,
-        minSymbols: 1
-      })) {
-        setPasswordError("Please enter valid Password")
+        setPasswordError("Password is a required field");
+      } else if (
+        !validator.isStrongPassword(password, {
+          minLength: 6,
+          minNumbers: 1,
+          minSymbols: 1,
+        })
+      ) {
+        setPasswordError("Please enter valid Password");
       } else {
-        setPasswordError("")
+        setPasswordError("");
       }
     }
+
   }
+
   useEffect(() => {
     validateLogin();
   }, [email, password]);
 
   const logInWithEmailAndPassword = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       console.log("sdljbnfgkjsdgsdkj", email, password);
       await signInWithEmailAndPassword(auth, email, password)
+
         .then(async e => {
           console.log(e)
           localStorage.setItem('isAuth', 'true')
           localStorage.setItem('user', JSON.stringify(e?.user))
           navigate("/admin/users")
         }).catch(err => alert("no email found", err))
+
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -85,12 +89,14 @@ const AdminLogin = () => {
             <input
               type="email"
               name="email"
-              inputMode='text'
+              inputMode="text"
               className="form-control"
               placeholder="Enter email"
               value={email}
               onChange={(e) => {
+
                 setEmail(e.target.value)
+
               }}
             />
             <span className="text-danger">{emailError}</span>
@@ -102,11 +108,12 @@ const AdminLogin = () => {
               type="password"
               name="password"
               className="form-control"
-              inputMode='text'
+              inputMode="password"
               placeholder="Enter password"
+              type="password"
               value={password}
               onChange={(e) => {
-                setPassword(e.target.value)
+                setPassword(e.target.value);
               }}
             />
             <span className="text-danger">{passwordError}</span>
@@ -127,19 +134,22 @@ const AdminLogin = () => {
 
           <div className="d-grid">
             <button
-              type='submit'
+              type="submit"
               className="btn btn-primary"
               disabled={
-                isUndefined(email) || isUndefined(password) || !(isEmpty(emailError) && isEmpty(passwordError))
+                isUndefined(email) ||
+                isUndefined(password) ||
+                !(isEmpty(emailError) && isEmpty(passwordError))
               }
-              onClick={logInWithEmailAndPassword}>
+              onClick={logInWithEmailAndPassword}
+            >
               Submit
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default AdminLogin;

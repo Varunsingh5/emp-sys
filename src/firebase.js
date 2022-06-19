@@ -8,13 +8,13 @@ import {
 } from "firebase/auth";
 import {
   getFirestore,
-  // query,
-  // getDocs,
+  query,
+  getDocs,
   collection,
-  // where,
+  where,
   addDoc,
-  // doc,
-  // getDoc,
+  doc,
+  getDoc,
 } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 
@@ -33,20 +33,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const firebaseDb = getDatabase(app);
+// const authRef = firebase.auth();
 
 
-// const logInWithEmailAndPassword = async (email, password, navigate) => {
-//   try {
-//     await signInWithEmailAndPassword(auth, email, password).then(e => {
-//       localStorage.setItem('isAuth', 'true')
-//       localStorage.setItem('user', JSON.stringify(e?.user))
-//       navigate('/dashboard')
-//     }).catch(err => console.log("signin eror", err))
-//   } catch (err) {
-//     console.error(err);
-//     alert(err.message);
-//   }
-// };
 // const logInWithEmailAndPassword = async (email, password, navigate) => {
 
 //   try {
@@ -89,27 +78,7 @@ const firebaseDb = getDatabase(app);
 //     alert(err.message);
 //   }
 // };
-const registerWithEmailAndPassword = async (name, email, password, navigate) => {
-  try {
-    const res = await createUserWithEmailAndPassword(auth, email, password).then(async (e) => {
-      localStorage.setItem('isAuth', 'true')
-      localStorage.setItem('user', JSON.stringify(e?.user))
-      const user = e?.user;
-      await addDoc(collection(db, "userList"), {
-        uid: user.uid,
-        name,
-        authProvider: "local",
-        email,
-        onlineState: "",
-        role: "admin"
-      });
-      navigate('/dashboard')
-    }).catch(err => alert(err.message))
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
+
 const sendPasswordReset = async (email, navigate) => {
   try {
     await sendPasswordResetEmail(auth, email).then(e => {
@@ -123,6 +92,31 @@ const sendPasswordReset = async (email, navigate) => {
   }
 };
 
+
+
+// const registerWithEmailAndPassword = async ( email, password, navigate) => {
+//   try {
+//     // const q = query(collection(db, "userList"), where("isDeleted", "==", true), where("email", "==", email));
+//     // const querySnapshot = await getDocs(q);
+//     // const dd = [];
+//     const res = await createUserWithEmailAndPassword(auth, email, password).then(async (e) => {
+//       // localStorage.setItem('isAuth', 'true')
+//       // localStorage.setItem('user', JSON.stringify(e?.user))
+//       // const user = e?.user;
+//       await addDoc(collection(db, "users"), {
+//         // uid: user.uid,
+//         // name,
+//         // authProvider: "local",
+//         email,
+//         // onlineState: ""
+//       });
+//       navigate('/admin/users')
+//     }).catch(err => alert(err.message))
+//   } catch (err) {
+//     console.error(err);
+//     alert(err.message);
+//   }
+// };
 // const logout = async (navigate) => {
 //   const currentRole = await localStorage.getItem("role");
 //   localStorage.clear();
@@ -138,7 +132,7 @@ const logout = async (navigate) => {
   // const currentRole = await localStorage.getItem("role");
   localStorage.clear();
   await signOut(auth).then(e => {
-     navigate(`/admin/login`);
+    navigate(`/admin/login`);
   }).catch(err => console.log("signout error", err))
 
 };
@@ -146,8 +140,10 @@ export {
   auth,
   db,
   firebaseDb,
+
+  // authRef,
   // logInWithEmailAndPassword,
-  registerWithEmailAndPassword,
+  // registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
 };
