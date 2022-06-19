@@ -4,51 +4,28 @@ import './App.css'
 import { Routes, Route, Link, Router } from 'react-router-dom'
 // import SignUp from './components/signup.component'
 import UserLogin from "../src/components/Login/UserLogin";
-import { UserAuthContextProvider } from "../src/components/Context/UserAuthContext";
+import { UserAuthContextProvider } from "./components/context/UserAuthContext";
 import UserDashboard from './components/Screens/Dashboard/UserDashboard';
 
 function App() {
+  const email = localStorage.getItem("myEmail");
   return (
     <div className="App">
       {/* className="navbar navbar-expand-lg navbar-light fixed-top" */}
       <nav >
         <div className="container">
-          {/* <Link className="navbar-brand" to={'/sign-in'}> */}
-          {/* <h1>Squadminds Pvt. Ltd.</h1>   */}
-          {/* </Link> */}
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
 
           </div>
         </div>
       </nav>
-
-      {/* <Routes>
-
-       
-
-        <Route exact path="/admin/login" element={<AdminLogin />} />
-
-
-        <Route exact path="/user/setPassword" element={<SetPassword />} />
-
-        <Route path="/sign-in" element={<AdminLogin />} />
-
-
-        <Route path="/" element={<UserLogin />} />
-        <Route path="/user/login" element={<UserLogin />} />
-
-
-        <Route path="/" element={<UserLogin />} />
-        <Route path="/user/dashboard" element={<UserDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<UserTable />} />
-
-
-      </Routes>  */}
       <UserAuthContextProvider>
         <Routes>
-          <Route path="/user/dashboard" element={<UserDashboard />} />
-          <Route path="/" element={<UserLogin />} />
+          {email ?
+            <Route path="/user/dashboard" element={<UserDashboard />} />
+            :
+            <Route path="/" element={<UserLogin />} />
+          }
         </Routes>
       </UserAuthContextProvider>
 

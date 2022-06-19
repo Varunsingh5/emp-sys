@@ -1,38 +1,28 @@
-import React, { useEffect, useState, } from "react";
-
-import "react-phone-input-2/lib/style.css";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
 import validator from "validator";
-import { useNavigate, Link } from "react-router-dom";
 import { isEmpty, isUndefined } from "lodash";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { doc } from "firebase/firestore";
-import { db } from "../../firebase";
-import { getDoc } from "firebase/firestore";
-import { query, collection, where, getDocs } from "firebase/firestore";
-import { Alert, } from "react-bootstrap"
-import { Button, } from "reactstrap";
-
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import { useUserAuth } from "../context/UserAuthContext";
 import { auth, } from "../../firebase";
+// import { query,collection, where, getDocs, } from "firebase/firestore";
+// import  {db} from "./firebase";
 import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
-// import "./UserLogin.css";
-
-import { Form } from "react-bootstrap";
-import { useUserAuth } from "../Context/UserAuthContext"
+import "./UserLogin.css";
 
 const UserLogin = () => {
+  const [value, setValue] = useState(false);
+  const { setUpRecaptha } = useUserAuth();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [phone, setPhone] = useState();
   const location = useLocation();
-
-  // const [value, setValue] = useState(false);
-  // const { setUpRecaptha } = useUserAuth();
-
   const [otp, setOtp] = useState("");
   const [flag, setFlag] = useState(false);
   const [number, setNumber] = useState("");
@@ -41,14 +31,12 @@ const UserLogin = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
-  // const [name, setName] = useState("");
-  const { setUpRecaptha } = useUserAuth();
   const [result, setResult] = useState("");
-
   const [phoneError, setPhoneError] = useState("");
+  const [user, setUser] = useState(null)
 
 
-  const login1 = (e) => {
+  const login = (e) => {
     e.preventDefault();
     // const q = query(collection(db, "userList"), where("isDeleted", "==", true), where("phone", "==", phone), where("email", "==", email));
     // const querySnapshot = await getDocs(q);
@@ -73,7 +61,6 @@ const UserLogin = () => {
     console.log("location.search", window.atob(phone));
     phone && setPhone(window.atob(phone))
   }, [])
-
 
   // Validations
   const validateLogin = () => {
@@ -136,7 +123,6 @@ const UserLogin = () => {
     } catch (err) {
       setError(err.message);
     }
-
   };
 
   const verifyOtp = async (e) => {
@@ -151,38 +137,36 @@ const UserLogin = () => {
     }
   };
 
-
-  // if email and phone number exists
-
-
-  const login = async (e) => {
-    e.preventDefault();
-    const q = query(collection(db, "userList"), where("phone", "==", phone), where("email", "==", email));
-    const querySnapshot = await getDocs(q);
-    try {
-      signInWithEmailAndPassword(auth, email, password)
-        .then(async (e) => {
+//set local storage
+const handle = () => {
+  // localStorage.setItem('Email', email);
+  // localStorage.setItem('Phone', phone);
+  signInWithEmailAndPassword(auth,)
+};
 
 
-          console.log(e);
-          localStorage.setItem("isAuth", "true");
-          localStorage.setItem("user", JSON.stringify(e?.user));
-          navigate("/user/dashboard");
-        })
-        .catch((err) => alert("catch error in login", err));
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-    }
-  };
+// const fetchUserEmail = async (user) => {
+//   try {
+//     const q = query(collection(db, "userList"), where("uid", "==", user?.uid));
+//     const doc = await getDocs(q);
+//     const data = doc.docs[0].data();
+//     setEmail(data.email);
+//     return ({ user })
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 
-
-  useEffect(() => {
-    const phone = location.search.substring(8)
-    console.log("location.search", window.atob(phone));
-    phone && setPhone(window.atob(phone))
-  }, [])
-
+// const setUserDetails = async () => {	
+//   const usr = await localStorage.getItem('user');
+//   console.log("asfsfis", usr);
+//   setUser(JSON.parse(usr));
+//   await fetchUserEmail(JSON.parse(usr))
+// }
+// useEffect(() => {
+//   setUserDetails();
+//   return () => null
+// }, []);
 
   if (phoneLogin) {
     return (
@@ -246,10 +230,22 @@ const UserLogin = () => {
                   isUndefined(password) ||
                   !(isEmpty(emailError) && isEmpty(passwordError))
                 }
+                onClick={handle}
+                
               // onClick={() => logInWithEmailAndPassword(email, password, navigate)}
               >
                 Login
               </button>
+              {/* {localStorage.getItem('Email') && (
+                  <div>
+                     Email: <p>{localStorage.getItem('Email')}</p>
+                  </div>
+               )}
+               {localStorage.getItem('Phone') && (
+                  <div>
+                     Phone: <p>{localStorage.getItem('Phone')}</p>
+                  </div>
+               )} */}
               <br />
               <p
                 style={{ textAlign: "center" }}
@@ -262,7 +258,6 @@ const UserLogin = () => {
         </div>
       </div>
     );
-
   }
 
   else {
@@ -285,7 +280,6 @@ const UserLogin = () => {
               <Link to="/">
                 <Button variant="secondary">Cancel</Button>
               </Link>
-
               &nbsp;
               <Button type="submit" variant="primary">
                 Send Otp
@@ -296,13 +290,11 @@ const UserLogin = () => {
               style={{ textAlign: "center" }}
               onClick={() => setPhoneLogin(true)}
             >
-
               Login with Email and Password
             </p>
           </Form>
 
           <Form onSubmit={verifyOtp} style={{ display: flag ? "block" : "none" }}>
-
             <Form.Group className="mb-3" controlId="formBasicOtp">
               <Form.Control
                 type="otp"
@@ -312,24 +304,19 @@ const UserLogin = () => {
             </Form.Group>
 
             <div className="button-right">
-
               <Link to="/">
                 <Button variant="secondary">Cancel</Button>
               </Link>
-
               &nbsp;
               <Button type="submit" variant="primary">
                 Verify
               </Button>
             </div>
           </Form>
-
         </div>
       </>
     );
   }
-
 };
 
 export default UserLogin;
-

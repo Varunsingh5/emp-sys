@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  // signInWithEmailAndPassword,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
@@ -35,7 +35,18 @@ const db = getFirestore(app);
 const firebaseDb = getDatabase(app);
 
 
-
+// const logInWithEmailAndPassword = async (email, password, navigate) => {
+//   try {
+//     await signInWithEmailAndPassword(auth, email, password).then(e => {
+//       localStorage.setItem('isAuth', 'true')
+//       localStorage.setItem('user', JSON.stringify(e?.user))
+//       navigate('/dashboard')
+//     }).catch(err => console.log("signin eror", err))
+//   } catch (err) {
+//     console.error(err);
+//     alert(err.message);
+//   }
+// };
 // const logInWithEmailAndPassword = async (email, password, navigate) => {
 
 //   try {
