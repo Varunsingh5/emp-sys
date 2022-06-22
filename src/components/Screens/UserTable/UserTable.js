@@ -12,7 +12,7 @@ import AdminSidebar from "../pages/Sidebar/AdminSidebar"
 
 import { updatePassword, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
-import validator from 'validator';
+// import validator from 'validator';
 
 var CryptoJS = require("crypto-js");
 
@@ -101,7 +101,7 @@ const UserTable = () => {
       }
     }
     else {
-      const q = query(collection(db, "userList"), where("isDeleted", "==", true), where("phone", "==", phone), where("email", "==", email));
+      const q = query(collection(db, "userList"), where("isDeleted", "==", false), where("phone", "==", phone), where("email", "==", email));
       const querySnapshot = await getDocs(q);
       const dd = [];
 
@@ -110,19 +110,8 @@ const UserTable = () => {
         dd.push(doc.id);
       });
       if (dd.length > 0) {
-        alert("previous user  ")
-        const docRef = doc(db, 'userList', dd[0]);
-        await updateDoc(docRef, {
-          isDeleted: false,
-          deleted_at: null,
-        }).then((e) => {
-          setEmail();
-          setPhone("");
-          setName("");
-        })
-          .catch((error) =>
-            console.log("error on doc add user list", error)
-          );
+        alert(" user already user  ")
+
       }
       else {
         // var CryptoJS = require("crypto-js");
