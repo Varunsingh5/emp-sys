@@ -53,12 +53,11 @@ function Register() {
   const updatePswd = () => {
 
     updatePassword(user, password).then(() => {
-      // Update successful.
+     alert("Password has been saved")
       console.log("dfgdfxbjjhh")
       navigate("/user/dashboard");
     }).catch((error) => {
-      // An error ocurred
-      // ...
+     alert("Password already set")
     });
   }
 

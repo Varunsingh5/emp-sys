@@ -9,9 +9,6 @@ import UserTable from './components/Screens/UserTable/UserTable';
 
 // import SignUp from './components/signup.component'
 import UserLogin from "../src/components/Login/UserLogin";
-// import PrivateRoute from './components/Routes/PrivateRoute';
-// import PublicRoute from './components/Routes/PublicRoute';
-// import SetPassword from './components/Login/setPassword';
 import SetPassword from "./components/Login/setPassword"
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
@@ -58,7 +55,8 @@ function App() {
         <Route exact path="/user/setPassword" element={role ? role === "user" ? <Navigate to="/user/dashboard" /> : <Navigate to="/admin/dashboard" /> : <SetPassword />} />
 
 
-        <Route exact path="/user/table" element={<UserTable />} />
+
+        <Route exact path="/admin/user/table" element={<UserTable />} />
 
 
         <Route exact path="/user/*" element={<Navigate to="/" />} />

@@ -9,6 +9,8 @@ import moment from "moment";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AdminSidebar from "../pages/Sidebar/AdminSidebar"
+import validator from "validator";
+import PhoneInput from "react-phone-number-input";
 
 import { updatePassword, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
@@ -21,7 +23,10 @@ const UserTable = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState("");
+  const [number, setNumber] = useState("");
 
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [loader, setLoader] = useState(false);
   const [userCollection, setUserCollection] = useState(null);
   const [edit, setEdit] = useState(false);
@@ -57,13 +62,9 @@ const UserTable = () => {
     const randomArray = [];
     for (let index = 0; index < arr.length; index++) {
       randomArray.push(arr[index].toString(36))
-
     }
     return randomArray.join("");
-
   }
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -86,7 +87,7 @@ const UserTable = () => {
         const docRef = doc(db, 'userList', selectedDoc);
         await updateDoc(docRef, {
           name: name,
-          // email: email,
+          email: email,
           phone: phone,
           updated_at: moment.now(),
         }).then((e) => {
@@ -114,15 +115,8 @@ const UserTable = () => {
 
       }
       else {
-        // var CryptoJS = require("crypto-js");
-        // let data;
-        // var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), password).toString();
-        // console.log(ciphertext);
-
-
+        
         const res = await createUserWithEmailAndPassword(auth, email, generateHash()).then(async (e) => {
-          // localStorage.setItem('isAuth', 'true')
-          // localStorage.setItem('user', JSON.stringify(e?.user))
           const user = e?.user;
           console.log("user", user);
 
@@ -152,31 +146,12 @@ const UserTable = () => {
             );
         }).catch((error => { }))
 
-
-
-
       }
     }
   }
 
 
-
-
   const auth = getAuth();
-
-  const user = auth.currentUser;
-  let newPassword;
-  // getASecureRandomPassword();
-
-  updatePassword(user, newPassword)
-    .then(() => {
-      console.log("newPassword")
-    })
-    .catch((error) => {
-      // An error ocurred
-      // ...
-    })
-
 
 
   const invite = async (item) => {
@@ -197,16 +172,12 @@ const UserTable = () => {
       var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'df1cbr4ytslujn30aokiqz9mvx6ehw25').toString();
       console.log(ciphertext, "hvnggngngnhghg");
 
-
-
       if (!docSnap.data()?.invite_sent) {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
-
-
           body: JSON.stringify({ encptyData: ciphertext, email: item.details.email }),
           redirect: 'follow'
         };
@@ -227,27 +198,7 @@ const UserTable = () => {
   }
 
 
-  // const invite = (user) => {
-  //   console.log("item",)
-  //   const docRef = doc(db, "userList", item.id);
-  //   console.log("docRef",docRef)
-  //   const docSnap = await getDoc(docRef);
-  //   console.log("docRef",docSnap.data().email)
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-  //   var requestOptions = {
-  //     method: 'POST',
-  //     headers: myHeaders,
-  //     body: JSON.stringify({ email: user.email, phone: user.phone }),
-  //     redirect: 'follow'
-  //   };
-
-  //   fetch("http://localhost:3007/send_mail", requestOptions)
-  //     .then(response => response.text())
-  //     .then(result => console.log(result))
-  //     .catch(error => console.log('error', error));
-  // }
+ 
 
   const deleteUser = async (id) => {
     alert("Are you sure!");
@@ -275,10 +226,6 @@ const UserTable = () => {
     setEdit(true);
   }
 
-  const [emailError, setEmailError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-
-
   const validateLogin = () => {
     if (!isUndefined(email)) {
       if (isEmpty(email)) {
@@ -290,18 +237,19 @@ const UserTable = () => {
         setEmailError("")
       }
     }
-    // if (!isUndefined(password)) {
-    //   if (isEmpty(password)) {
-    //     setPasswordError("Password is a required field")
-    //   }
-    //   else if (!validator.isStrongPassword(password, {
-    //     minLength: 6,
-    //     minNumbers: 1,
-    //     minSymbols: 1
-    //   })) {
-    //     setPasswordError("Please enter valid Password")
+    // if (!isUndefined(phone)) {
+    //   if (isEmpty(phone)) {
+    //     setPhone("phone is a required field");
+    //   } else if (
+    //     !validator.isStrongPassword(phone, {
+    //       minLength: 10,
+    //       minNumbers: 10,
+        
+    //     })
+    //   ) {
+    //     setPhoneError("Please enter valid phone");
     //   } else {
-    //     setPasswordError("")
+    //     setPhoneError("");
     //   }
     // }
   }
@@ -326,9 +274,15 @@ const UserTable = () => {
             />
           </div> <br />
           <div>
-            <input type="number" className="form-control" placeholder="Mobile" name="mobile"
+            {/* <input type="number" className="form-control" placeholder="Mobile" name="mobile"
               value={phone} onChange={(e) => { setPhone(e.target.value) }}
-            />
+            /> */}
+             <PhoneInput
+                defaultCountry="IN"
+                value={phone}
+                onChange={setPhone}
+                placeholder="Enter Phone Number"
+              />
           </div>
           <br />
           <div>
