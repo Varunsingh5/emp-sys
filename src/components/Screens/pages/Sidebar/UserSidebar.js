@@ -2,10 +2,6 @@
 //import useState hook to create menu collapse state
 import React, { useState } from "react";
 
-import { Routes, Route } from "react-router-dom"
-
-
-//import react pro sidebar components
 import {
   ProSidebar,
   Menu,
@@ -19,10 +15,8 @@ import { logout, } from "../../../../firebase"
 
 
 //import icons from react icons
-import { FaList, FaRegHeart } from "react-icons/fa";
-import { FiHome, FiLogOut, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
-import { RiPencilLine } from "react-icons/ri";
-import { BiCog } from "react-icons/bi";
+import { FaList, } from "react-icons/fa";
+import { FiHome, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
 
 
 //import sidebar css from react-pro-sidebar module and our custom css 
@@ -78,16 +72,11 @@ const UserSidebar = () => {
 
 
               <MenuItem icon={<FaList />}>Settings</MenuItem>
-              {/* <Route path="/admin/users" exact component={UserTable} /> */}
 
-              {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}
-              {/* <MenuItem icon={<RiPencilLine />}>Author</MenuItem>
-              <MenuItem icon={<BiCog />}>Settings</MenuItem> */}
             </Menu>
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              {/* <MenuItem icon={<FiLogOut />} onClick={handleLogout}>Logout</MenuItem> */}
               <button className="btn btn-primary rounded-pill mx-auto logout-btn" type="submit" onClick={handleLogout}><span className="ml-1">Logout</span></button>
 
             </Menu>

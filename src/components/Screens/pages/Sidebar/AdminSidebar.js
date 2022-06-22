@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 import { Routes, Route } from "react-router-dom"
-
+import UserTable from "../../UserTable/UserTable";
 
 //import react pro sidebar components
 import {
@@ -29,7 +29,6 @@ import { BiCog } from "react-icons/bi";
 import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
 
-
 const AdminSidebar = () => {
 
   const navigate = useNavigate();
@@ -42,8 +41,6 @@ const AdminSidebar = () => {
       console.log(error.message);
     }
   };
-
-
 
   //create initial menuCollapse state using useState hook
   const [menuCollapse, setMenuCollapse] = useState(false)
