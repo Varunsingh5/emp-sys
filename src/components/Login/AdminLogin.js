@@ -1,10 +1,6 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
-
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
@@ -15,18 +11,13 @@ import { getDoc } from "firebase/firestore";
 
 
 const AdminLogin = () => {
-
   const [email, setEmail] = useState("test@gmail.com");
   const [password, setPassword] = useState("Test@123456");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
   const [status, setStatus] = useState("Available");
 
-
-
   const validateLogin = () => {
-
     if (!isUndefined(email)) {
       if (isEmpty(email)) {
         setEmailError("Email is a required field");
@@ -51,9 +42,7 @@ const AdminLogin = () => {
         setPasswordError("");
       }
     }
-
   }
-
   useEffect(() => {
     validateLogin();
   }, [email, password]);
@@ -70,8 +59,6 @@ const AdminLogin = () => {
           console.log(docSnap.data().role);
           localStorage.setItem('isAuth', 'true')
           localStorage.setItem('user', JSON.stringify(e?.user))
-
-
           localStorage.setItem('role', docSnap.data().role);
           console.log(e)
           // console.log("dfgdfgd", docSnap.data())
@@ -93,12 +80,10 @@ const AdminLogin = () => {
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form>
-          <  ArrowBackIcon onClick={user} />
+          <ArrowBackIcon onClick={user} />
           <h3>Sign In</h3>
-
           <div className="mb-3">
             <label>Email address</label>
-
             <input
               type="email"
               name="email"
@@ -107,14 +92,11 @@ const AdminLogin = () => {
               placeholder="Enter email"
               value={email}
               onChange={(e) => {
-
                 setEmail(e.target.value)
-
               }}
             />
             <span className="text-danger">{emailError}</span>
           </div>
-
           <div className="mb-3">
             <label>Password</label>
             <input
@@ -130,7 +112,6 @@ const AdminLogin = () => {
             />
             <span className="text-danger">{passwordError}</span>
           </div>
-
           <div className="mb-3">
             <div className="custom-control custom-checkbox">
               <input
@@ -143,7 +124,6 @@ const AdminLogin = () => {
               </label>
             </div>
           </div>
-
           <div className="d-grid">
             <button
               type="submit"

@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import validator from "validator";
@@ -10,22 +8,24 @@ import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { auth, } from "../../firebase";
-// import { query,collection, where, getDocs, } from "firebase/firestore";
-// import  {db} from "./firebase";
+import { query, collection, where, getDocs, } from "firebase/firestore";
+
 import {
   RecaptchaVerifier,
+
   signInWithEmailAndPassword,
   signInWithPhoneNumber,
 } from "firebase/auth";
 import "./UserLogin.css";
 import { db } from "../../firebase";
 import { getDoc, doc } from "firebase/firestore";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { useUserAuth } from "../Context/UserAuthContext"
+
 
 
 const UserLogin = () => {
   const [value, setValue] = useState(false);
-  // const { setUpRecaptha } = useUserAuth();
+  const { setUpRecaptha } = useUserAuth();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [phone, setPhone] = useState();
@@ -47,6 +47,7 @@ const UserLogin = () => {
     e.preventDefault();
 
     try {
+
       console.log(password);
       console.log(email);
       const q = query(collection(db, "userList"), where("email", "==", email), where("isDeleted", "==", false));
@@ -105,7 +106,6 @@ const UserLogin = () => {
   useEffect(() => {
     validateLogin();
   }, [email, password]);
-
   // phone number validation
   const validatePhone = () => {
     if (!isUndefined(phone)) {
@@ -121,7 +121,8 @@ const UserLogin = () => {
     validatePhone();
   }, [phone]);
 
-    const getOtp = async (e) => {
+
+  const getOtp = async (e) => {
     e.preventDefault();
     console.log(number);
     setError("");
@@ -129,17 +130,16 @@ const UserLogin = () => {
       return setError("Please enter a valid phone number!");
     try {
       console.log(number);
-      
       const q = query(collection(db, "userList"), where("phone", "==", number), where("isDeleted", "==", false));
       const querySnapshot = await getDocs(q);
       let test;
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data(),"phone", "==", number);
-        test=doc.data();
+        console.log(doc.id, " => ", doc.data(), "phone", "==", number);
+        test = doc.data();
       });
       console.log(test.phone);
-      if(test.phone===number){
+      if (test.phone === number) {
         console.log('matched');
         const recaptchaVerifier = new RecaptchaVerifier(
           "recaptcha-container",
@@ -155,14 +155,13 @@ const UserLogin = () => {
       else {
         console.log('not');
       }
-   
+
     } catch (err) {
       // alert("no. not register")
       setError(err.message);
       return setError("Please enter a valid phone number!");
     }
   };
-
   const verifyOtp = async (e) => {
     e.preventDefault();
     setError("");
@@ -171,44 +170,13 @@ const UserLogin = () => {
       await result.confirm(otp);
       localStorage.setItem("isAuth", "true");
       localStorage.setItem("role", "user");
-      // const docRef = doc(db, "userList");
-      // const docSnap = await getDoc(docRef);
-      // localStorage.setItem("role", docSnap.data().role);
     } catch (err) {
       setError(err.message);
     }
   };
-
-  //set local storage
   const handle = () => {
-    // localStorage.setItem('Email', email);
-    // localStorage.setItem('Phone', phone);
     signInWithEmailAndPassword(auth,)
   };
-
-
-  // const fetchUserEmail = async (user) => {
-  //   try {
-  //     const q = query(collection(db, "userList"), where("uid", "==", user?.uid));
-  //     const doc = await getDocs(q);
-  //     const data = doc.docs[0].data();
-  //     setEmail(data.email);
-  //     return ({ user })
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // const setUserDetails = async () => {	
-  //   const usr = await localStorage.getItem('user');
-  //   console.log("asfsfis", usr);
-  //   setUser(JSON.parse(usr));
-  //   await fetchUserEmail(JSON.parse(usr))
-  // }
-  // useEffect(() => {
-  //   setUserDetails();
-  //   return () => null
-  // }, []);
 
   if (phoneLogin) {
     return (
@@ -219,9 +187,7 @@ const UserLogin = () => {
             {error && <div className="auth__error">{error}</div>}
             <div className="mb-3">
               <label>Email address</label>
-
               <input
-                // type={"email"}
                 name="email"
                 inputMode="text"
                 className="form-control"
@@ -233,9 +199,9 @@ const UserLogin = () => {
               />
               <span className="text-danger">{emailError}</span>
             </div>
-
             <div className="mb-3">
               <label>Password</label>
+
               <input
                 name="password"
                 className="form-control"
@@ -247,7 +213,9 @@ const UserLogin = () => {
                   setPassword(e.target.value);
                 }}
               />
+
               <span className="text-danger">{passwordError}</span>
+
             </div>
 
             <div className="mb-3">
@@ -273,21 +241,9 @@ const UserLogin = () => {
                   !(isEmpty(emailError) && isEmpty(passwordError))
                 }
                 onClick={handle}
-
-              // onClick={() => logInWithEmailAndPassword(email, password, navigate)}
               >
                 Login
               </button>
-              {/* {localStorage.getItem('Email') && (
-                  <div>
-                     Email: <p>{localStorage.getItem('Email')}</p>
-                  </div>
-               )}
-               {localStorage.getItem('Phone') && (
-                  <div>
-                     Phone: <p>{localStorage.getItem('Phone')}</p>
-                  </div>
-               )} */}
               <br />
               <p
                 style={{ textAlign: "center" }}
