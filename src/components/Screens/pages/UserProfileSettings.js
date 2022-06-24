@@ -1,9 +1,11 @@
 import React from 'react'
-import UserSidebar from '../pages/Sidebar/UserSidebar'
+// import UserSidebar from '../pages/Sidebar/UserSidebar'
 import "./UserProfileSettings.css";
 
 const UserProfileSettings = () => {
     
+
+  
     return (
         <div>
        <div className="container">

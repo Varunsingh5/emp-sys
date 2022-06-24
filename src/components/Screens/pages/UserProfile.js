@@ -1,5 +1,5 @@
 import "./UserProfile.css";
-import UserSidebar from "./Sidebar/UserSidebar";
+// import UserSidebar from "./Sidebar/UserSidebar";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
@@ -7,9 +7,7 @@ const UserProfile = () => {
    
   return (
     <div>
-        <div style={{width:"30%", marginTop:"2%", height:"100%"}}>
-            <UserSidebar />
-        </div>
+       
   <div style={{width:"70%", marginLeft:"23%"}}>
   <Box sx={{ flexGrow: 1 }} >
      <Grid container spacing={2}>
@@ -60,7 +58,7 @@ const UserProfile = () => {
             </div>
         </Grid>
         <Grid item md={4}>
-        <h3 style={{textShadow: '0 0 3px pink, 0 0 5px skyblue'}}>Socials</h3>
+        <h3 style={{textShadow: '0 0 3px pink, 0 0 5px skyblue'}}>Hobbies</h3>
             <div className="media">
             <label>Phone No.:</label>
             <p>4552415789</p>
@@ -80,6 +78,9 @@ const UserProfile = () => {
       </Grid>
     </Box>
     </div>
+    {/* <div style={{width:"30%", marginTop:"2%", height:"100%"}}>
+            <UserSidebar />
+        </div> */}
 </div>
   );
 };

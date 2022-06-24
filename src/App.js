@@ -50,7 +50,7 @@ function App() {
         <Route exact path="/user/setPassword" element={role ? role === "user" ? <Navigate to="/user/dashboard" /> : <Navigate to="/admin/dashboard" /> : <SetPassword />} />
 
 
-        <Route exact path="admin/user/table" element={<UserTable />} />
+        <Route exact path="user/table" element={<UserTable />} />
         <Route exact path="/user/settings" element={<UserSettings />} />
         <Route exact path="/user/profile" element={<UserProfile/>}/>
         <Route exact path="/user/profile/settings" element={<UserProfileSettings/>}/>
