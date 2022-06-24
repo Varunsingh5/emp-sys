@@ -3,20 +3,16 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { Routes, Route, Link, Router, Navigate } from 'react-router-dom'
 import AdminLogin from './components/Login/AdminLogin';
-
 import AdminDashboard from './components/Screens/Dashboard/AdminDashboard';
 import UserTable from './components/Screens/UserTable/UserTable';
-
-// import SignUp from './components/signup.component'
 import UserLogin from "../src/components/Login/UserLogin";
-// import PrivateRoute from './components/Routes/PrivateRoute';
-// import PublicRoute from './components/Routes/PublicRoute';
-// import SetPassword from './components/Login/setPassword';
 import SetPassword from "./components/Login/setPassword"
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import UserDashboard from "../src/components/Screens/Dashboard/UserDashboard"
-
+import UserProfile from './components/Screens/pages/UserProfile';
+import UserProfileSettings from './components/Screens/pages/UserProfileSettings';
+import UserSettings from './components/Screens/pages/UserSettings'
 
 function App() {
   const [role, setRole] = useState(localStorage.getItem("role"));
@@ -29,17 +25,13 @@ function App() {
       }, 3000);
 
     });
-
-  }, [])
-
-
-
+    }, [])
+    
   return (
     <div className="App">
       <nav >
         <div className="container">
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-
           </div>
         </div>
       </nav>
@@ -58,9 +50,10 @@ function App() {
         <Route exact path="/user/setPassword" element={role ? role === "user" ? <Navigate to="/user/dashboard" /> : <Navigate to="/admin/dashboard" /> : <SetPassword />} />
 
 
-        <Route exact path="/user/table" element={<UserTable />} />
-
-
+        <Route exact path="admin/user/table" element={<UserTable />} />
+        <Route exact path="/user/settings" element={<UserSettings />} />
+        <Route exact path="/user/profile" element={<UserProfile/>}/>
+        <Route exact path="/user/profile/settings" element={<UserProfileSettings/>}/>
         <Route exact path="/user/*" element={<Navigate to="/" />} />
         <Route exact path="/admin/*" element={<Navigate to="/" />} />
         <Route exact path="/*" element={<Navigate to="/" />} />

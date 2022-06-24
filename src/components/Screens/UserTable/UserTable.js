@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { db } from "../../../firebase"
 import { setDoc, doc, getDocs, collection, where, query, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
@@ -151,10 +149,6 @@ const UserTable = () => {
               console.log("error on doc add user list", error)
             );
         }).catch((error => { }))
-
-
-
-
       }
     }
   }

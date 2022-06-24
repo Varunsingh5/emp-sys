@@ -30,6 +30,9 @@ import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
 
 const AdminSidebar = () => {
+  const test=()=>{
+    console.log("poroff")
+  }
 
   const navigate = useNavigate();
 
@@ -74,7 +77,7 @@ const AdminSidebar = () => {
               </MenuItem>
 
 
-              <MenuItem icon={<FaList />}>Profile</MenuItem>
+              <MenuItem icon={<FaList />} onClick={test}>Profile</MenuItem>
               {/* <Route path="/admin/users" exact component={UserTable} /> */}
 
               {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}

@@ -1,5 +1,3 @@
-
-//import useState hook to create menu collapse state
 import React, { useState } from "react";
 
 import {
@@ -69,10 +67,7 @@ const UserSidebar = () => {
               <MenuItem active={true} icon={<FiHome />}>
                 User Profile
               </MenuItem>
-
-
-              <MenuItem icon={<FaList />}>Settings</MenuItem>
-
+                <MenuItem icon={<FaList />}>Settings</MenuItem>
             </Menu>
           </SidebarContent>
           <SidebarFooter>
