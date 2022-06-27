@@ -9,6 +9,9 @@ const AdminDashboard = () => {
       <div style={{ width: "30%" }}>
         <AdminSidebar />
       </div>
+ <div style={{ width: "70%" }}>
+      <h1 style={{marginLeft:"50%"}}>Welcome yo admin dashboard </h1>
+      </div>
 
     </>
   )

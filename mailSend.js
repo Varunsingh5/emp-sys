@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer")
 const EMAIL_USER = "singhvarun9101998@gmail.com";
-const EMAIL_PASSWORD = "hopeyumgpdyviepe";
+const EMAIL_PASSWORD = "dtphablhgofdtyuk";
 
 module.exports = async (emailID, link) => {
     const transporter = nodemailer.createTransport({

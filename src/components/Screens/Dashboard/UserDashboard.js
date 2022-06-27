@@ -6,7 +6,14 @@ import UserProfile from '../pages/UserProfile';
 
 const UserDashboard = () => {
     return (
-        <div>
+
+        <>
+            <div style={{ width: "30%" }}>
+                <UserSidebar />
+            </div>
+            <div style={{ width: "70%" }}>
+                <h1 style={{marginLeft:"50%"}}>Welome to user Dashboard</h1>
+                <div>
         <div>
         <Box sx={{ flexGrow: 1 }} >
            <Grid container spacing={2}>
@@ -90,6 +97,8 @@ const UserDashboard = () => {
           </Box>
           </div>
               </div>  
+            </div>
+        </>
     )
 }
 

@@ -1,20 +1,20 @@
-// //import useState hook to create menu collapse state
-// import React, { useState } from "react";
+//import useState hook to create menu collapse state
+import React, { useState } from "react";
 
-// import { Routes, Route } from "react-router-dom"
-// import UserTable from "../../UserTable/UserTable";
+import { Routes, Route } from "react-router-dom"
+import UserTable from "../../UserTable/UserTable";
 
-// //import react pro sidebar components
-// import {
-//   ProSidebar,
-//   Menu,
-//   MenuItem,
-//   SidebarHeader,
-//   SidebarFooter,
-//   SidebarContent,
-// } from "react-pro-sidebar";
-// import { useNavigate } from "react-router";
-// import { logout, } from "../../../../firebase"
+//import react pro sidebar components
+import {
+  ProSidebar,
+  Menu,
+  MenuItem,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarContent,
+} from "react-pro-sidebar";
+import { useNavigate } from "react-router";
+import { logout, } from "../../../../firebase"
 
 
 // //import icons from react icons
@@ -98,7 +98,7 @@
 // };
 // export default AdminSidebar;
 
-import React from 'react';
+
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -124,18 +124,60 @@ const AdminSidebar = () => {
   };
 
   return (
-    <div style={{height:"336%", marginTop:"-7%"}}> 
-      <CDBSidebar>
-        <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>Squadminds</CDBSidebarHeader>
-        <CDBSidebarContent>
-          <CDBSidebarMenu>
-            <CDBSidebarMenuItem icon="th-large">User Profile</CDBSidebarMenuItem>
-            <CDBSidebarMenuItem icon="sticky-note">Settings</CDBSidebarMenuItem>
-          </CDBSidebarMenu>
-          <button className="btn btn-primary rounded-pill mx-auto logout-btn" type="submit" onClick={handleLogout}><span className="ml-1">Logout</span></button>
-        </CDBSidebarContent>
-      </CDBSidebar>
+   
+
+    // <div style={{height:"336%", marginTop:"-7%"}}> 
+    //   <CDBSidebar>
+    //     <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>Squadminds</CDBSidebarHeader>
+    //     <CDBSidebarContent>
+    //       <CDBSidebarMenu>
+    //         <CDBSidebarMenuItem icon="th-large">User Profile</CDBSidebarMenuItem>
+    //         <CDBSidebarMenuItem icon="sticky-note">Settings</CDBSidebarMenuItem>
+    //       </CDBSidebarMenu>
+    //       <button className="btn btn-primary rounded-pill mx-auto logout-btn" type="submit" onClick={handleLogout}><span className="ml-1">Logout</span></button>
+    //     </CDBSidebarContent>
+    //   </CDBSidebar>
+
+    <>
+      <div id="header">
+        <ProSidebar collapsed={menuCollapse}>
+          <SidebarHeader>
+            <div className="logotext">
+              <p>{menuCollapse ? "Squadminds" : "Squadminds"}</p>
+            </div>
+            <div className="closemenu" onClick={menuIconClick} style={{ marginBottom: "10px" }}>
+              {menuCollapse ? (
+                <FiArrowRightCircle />
+              ) : (
+                <FiArrowLeftCircle />
+              )}
+            </div>
+          </SidebarHeader>
+          <SidebarContent>
+            <Menu iconShape="square">
+              <MenuItem active={true} icon={<FiHome />}>
+                UserList
+              </MenuItem>
+
+
+              <MenuItem icon={<FaList />}>Profile</MenuItem>
+              {/* <Route path="/admin/users" exact component={UserTable} /> */}
+
+              {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}
+              {/* <MenuItem icon={<RiPencilLine />}>Author</MenuItem>
+              <MenuItem icon={<BiCog />}>Settings</MenuItem> */}
+            </Menu>
+          </SidebarContent>
+          <SidebarFooter>
+            <Menu iconShape="square">
+              {/* <MenuItem icon={<FiLogOut />} onClick={handleLogout}>Logout</MenuItem> */}
+              <button className="btn btn-primary rounded-pill mx-auto logout-btn" type="submit" onClick={handleLogout}><span className="ml-1">Logout</span></button>
+
+            </Menu>
+          </SidebarFooter>
+        </ProSidebar>
       </div>
+      </>
   );
 };
 

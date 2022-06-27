@@ -8,15 +8,23 @@ import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { auth, } from "../../firebase";
+<
+import { query, collection, where, getDocs, } from "firebase/firestore";
+import { useUserAuth } from "../Context/UserAuthContext";
+
+
 import {
+  linkWithPhoneNumber,
   RecaptchaVerifier,
+
   signInWithEmailAndPassword,
   signInWithPhoneNumber,
+  // signInWithPhoneNumber,
 } from "firebase/auth";
 import "./UserLogin.css";
 import { db } from "../../firebase";
 import { getDoc, doc } from "firebase/firestore";
-import { collection, query, where, getDocs } from "firebase/firestore";
+
 const UserLogin = () => {
   const [value, setValue] = useState(false);
   const [email, setEmail] = useState();
@@ -37,6 +45,7 @@ const UserLogin = () => {
   const login = async (e) => {
     e.preventDefault();
     try {
+
       console.log(password);
       console.log(email);
       const q = query(collection(db, "userList"), where("email", "==", email), where("isDeleted", "==", false));
@@ -114,17 +123,50 @@ const UserLogin = () => {
       return setError("Please enter a valid phone number!");
     try {
       console.log(number);
-      const recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {},
-        auth
-      );
-      recaptchaVerifier.render();
-      const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
-      setResult(response);
-      setFlag(true);
+
+      // const recaptchaVerifier = new RecaptchaVerifier(
+      //   "recaptcha-container",
+      //   {},
+      //   auth
+      // );
+      // recaptchaVerifier.render();
+      // const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
+      // setResult(response);
+      // setFlag(true);
+
+      const q = query(collection(db, "userList"), where("phone", "==", number), where("isDeleted", "==", false));
+      const querySnapshot = await getDocs(q);
+      let test;
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data(), "phone", "==", number);
+        test = doc.data();
+      });
+      console.log(test.phone);
+      if (test.phone === number) {
+        console.log('matched');
+        const recaptchaVerifier = new RecaptchaVerifier(
+          "recaptcha-container",
+          {},
+          auth
+        );
+        recaptchaVerifier.render();
+        // const uid = " currentUser.id"
+       
+        // const response = await linkWithPhoneNumber(uid, number, recaptchaVerifier)
+        const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
+        // const response = await setUpRecaptha(number);
+        setResult(response);
+        setFlag(true);
+      }
+      else {
+        console.log('not');
+      }
+
     } catch (err) {
+      // alert("no. not register")
       setError(err.message);
+      return setError("Please enter a valid phone number!");
     }
   };
   const verifyOtp = async (e) => {
@@ -139,8 +181,11 @@ const UserLogin = () => {
       setError(err.message);
     }
   };
-  
- 
+
+  const handle = () => {
+    signInWithEmailAndPassword(auth,)
+  };
+
 
   if (phoneLogin) {
     return (
@@ -152,7 +197,6 @@ const UserLogin = () => {
             <div className="mb-3">
               <label>Email address</label>
               <input
-                // type={"email"}
                 name="email"
                 inputMode="text"
                 className="form-control"
@@ -166,6 +210,7 @@ const UserLogin = () => {
             </div>
             <div className="mb-3">
               <label>Password</label>
+
               <input
                 name="password"
                 className="form-control"
@@ -177,7 +222,9 @@ const UserLogin = () => {
                   setPassword(e.target.value);
                 }}
               />
+
               <span className="text-danger">{passwordError}</span>
+
             </div>
             <div className="mb-3">
               <div className="custom-control custom-checkbox">
@@ -200,7 +247,11 @@ const UserLogin = () => {
                   isUndefined(password) ||
                   !(isEmpty(emailError) && isEmpty(passwordError))
                 }
+
                 style={{backgroundColor:"black", borderColor:"black"}}
+
+                onClick={handle}
+
               >
                 Login
               </button>

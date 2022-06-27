@@ -47,29 +47,22 @@ function Register() {
   const [phone, setPhone] = useState();
   const [loader, setLoader] = useState(true);
 
-
-
-
   const updatePswd = () => {
-
     updatePassword(user, password).then(() => {
-      // Update successful.
+      alert("Password has been saved")
       console.log("dfgdfxbjjhh")
       navigate("/user/dashboard");
     }).catch((error) => {
-      // An error ocurred
-      // ...
+      alert("Password already set")
     });
   }
 
   const location = useLocation();
-
   const getDocument = async (decryptedData) => {
     console.log("fksfbjjbgj", decryptedData[0].phone);
     const q = query(collection(db, "userList"), where("email", "==", decryptedData[0].email), where("isDeleted", "==", false));
     const querySnapshot = await getDocs(q);
     const dd = [];
-
     querySnapshot.forEach((doc) => {
       console.log(doc.id, " => ", doc.data());
       dd.push(doc.data());
@@ -77,7 +70,6 @@ function Register() {
     if (dd.length > 0) {
       if (!isEmpty(dd[0].password)) {
         allowSetPassword(false)
-
       }
       setLoader(false)
     }
@@ -93,16 +85,12 @@ function Register() {
     }
   }, [location.search])
 
-
-
   return (
     <div className="register">
       <div className="register__container">
-
         <input
           type="text"
           className="register__textBox"
-
           disabled={isDisabled}
           value={email}
           onChange={(e) => {
@@ -137,17 +125,12 @@ function Register() {
         {/* <button className="register__btn" >
           Register
         </button> */}
-
-
-
         <Button type="submit" className="rounded-pill my-3" color="secondary-blue" onClick={updatePswd}
           style={{ backgroundColor: "blue", color: 'white', borderColor: "blue", padding: " 5px 32px 5px 26px", }}>
           Register
         </Button>
-
       </div>
     </div>
   );
 }
-
 export default Register;

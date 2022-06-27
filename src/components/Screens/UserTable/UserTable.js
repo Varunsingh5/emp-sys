@@ -7,9 +7,11 @@ import moment from "moment";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AdminSidebar from "../pages/Sidebar/AdminSidebar"
+import PhoneInput from "react-phone-number-input";
 
-import { updatePassword, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
+import { AlternateEmail } from "@material-ui/icons";
 // import validator from 'validator';
 
 var CryptoJS = require("crypto-js");
@@ -19,14 +21,13 @@ const UserTable = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState("");
-
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [loader, setLoader] = useState(false);
   const [userCollection, setUserCollection] = useState(null);
   const [edit, setEdit] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState("")
-  // const [status, setStatus] = useState("");
-
-
+  const auth = getAuth();
 
   useEffect(() => {
     try {
@@ -46,31 +47,23 @@ const UserTable = () => {
     } catch (error) {
       console.log("=error in snapshot", error);
     }
-
   }, []);
-
   const generateHash = () => {
     const array = new Uint32Array(8)
     const arr = window.crypto.getRandomValues(array)
     const randomArray = [];
     for (let index = 0; index < arr.length; index++) {
       randomArray.push(arr[index].toString(36))
-
     }
     return randomArray.join("");
-
   }
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-
     const q = query(collection(db, "userList"), where("phone", "==", phone || "email", "==", email));
     const querySnapshot = await getDocs(q);
     const dd = [];
-
     querySnapshot.forEach((doc) => {
       console.log(doc.id, " => ", doc.data());
       dd.push(doc.data());
@@ -84,7 +77,7 @@ const UserTable = () => {
         const docRef = doc(db, 'userList', selectedDoc);
         await updateDoc(docRef, {
           name: name,
-          // email: email,
+          email: email,
           phone: phone,
           updated_at: moment.now(),
         }).then((e) => {
@@ -109,18 +102,9 @@ const UserTable = () => {
       });
       if (dd.length > 0) {
         alert(" user already user  ")
-
       }
       else {
-        // var CryptoJS = require("crypto-js");
-        // let data;
-        // var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), password).toString();
-        // console.log(ciphertext);
-
-
         const res = await createUserWithEmailAndPassword(auth, email, generateHash()).then(async (e) => {
-          // localStorage.setItem('isAuth', 'true')
-          // localStorage.setItem('user', JSON.stringify(e?.user))
           const user = e?.user;
           console.log("user", user);
 
@@ -137,13 +121,24 @@ const UserTable = () => {
             deleted_at: null,
             invite_sent: false,
             // ciphertext
+            personal_details:
+              [{
+                alternate_Email: "",
+                alternate_phoneNumber: "",
+              }],
+            education: [{
+              college: "",
+
+            }],
+            skills: [
+              { about: "" }
+            ]
           })
             .then((e) => {
               console.log("error on doc add ", e)
               setEmail("");
               setPhone("");
               setName("");
-
             })
             .catch((error) =>
               console.log("error on doc add user list", error)
@@ -152,59 +147,28 @@ const UserTable = () => {
       }
     }
   }
-
-
-
-
-  const auth = getAuth();
-
-  const user = auth.currentUser;
-  let newPassword;
-  // getASecureRandomPassword();
-
-  updatePassword(user, newPassword)
-    .then(() => {
-      console.log("newPassword")
-    })
-    .catch((error) => {
-      // An error ocurred
-      // ...
-    })
-
-
-
   const invite = async (item) => {
     console.log("item",)
     const docRef = doc(db, "userList", item.id);
     console.log("docRef", docRef)
     const docSnap = await getDoc(docRef);
     console.log("docRef", docSnap.data().email)
-
-    // alert("invitation sent to the user")
+    alert("invitation sent to the user")
     if (docSnap.exists()) {
       console.log("4tsdynyjdryjnkdtr", docSnap.data().invite_sent)
-
-
       var data = [{ email: item.details.email, phone: item.details.phone }]
-
       // Encrypt
       var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'df1cbr4ytslujn30aokiqz9mvx6ehw25').toString();
       console.log(ciphertext, "hvnggngngnhghg");
-
-
-
       if (!docSnap.data()?.invite_sent) {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
-
-
           body: JSON.stringify({ encptyData: ciphertext, email: item.details.email }),
           redirect: 'follow'
         };
-
         fetch("http://localhost:3007/send_mail", requestOptions)
           .then(response => response.text())
           .then(async (result) => {
@@ -217,32 +181,7 @@ const UserTable = () => {
     }
     else {
     }
-
   }
-
-
-  // const invite = (user) => {
-  //   console.log("item",)
-  //   const docRef = doc(db, "userList", item.id);
-  //   console.log("docRef",docRef)
-  //   const docSnap = await getDoc(docRef);
-  //   console.log("docRef",docSnap.data().email)
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-  //   var requestOptions = {
-  //     method: 'POST',
-  //     headers: myHeaders,
-  //     body: JSON.stringify({ email: user.email, phone: user.phone }),
-  //     redirect: 'follow'
-  //   };
-
-  //   fetch("http://localhost:3007/send_mail", requestOptions)
-  //     .then(response => response.text())
-  //     .then(result => console.log(result))
-  //     .catch(error => console.log('error', error));
-  // }
-
   const deleteUser = async (id) => {
     alert("Are you sure!");
     const docRef = doc(db, 'userList', id);
@@ -258,7 +197,6 @@ const UserTable = () => {
         console.log("error on doc add user list", error)
       );
   }
-
   const editUser = (item) => {
     setEmail(item.details.email);
     setName(item.details.name);
@@ -268,11 +206,6 @@ const UserTable = () => {
     setSelectedDoc(item.id)
     setEdit(true);
   }
-
-  const [emailError, setEmailError] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-
-
   const validateLogin = () => {
     if (!isUndefined(email)) {
       if (isEmpty(email)) {
@@ -284,18 +217,19 @@ const UserTable = () => {
         setEmailError("")
       }
     }
-    // if (!isUndefined(password)) {
-    //   if (isEmpty(password)) {
-    //     setPasswordError("Password is a required field")
-    //   }
-    //   else if (!validator.isStrongPassword(password, {
-    //     minLength: 6,
-    //     minNumbers: 1,
-    //     minSymbols: 1
-    //   })) {
-    //     setPasswordError("Please enter valid Password")
+    // if (!isUndefined(phone)) {
+    //   if (isEmpty(phone)) {
+    //     setPhone("phone is a required field");
+    //   } else if (
+    //     !validator.isStrongPassword(phone, {
+    //       minLength: 10,
+    //       minNumbers: 10,
+
+    //     })
+    //   ) {
+    //     setPhoneError("Please enter valid phone");
     //   } else {
-    //     setPasswordError("")
+    //     setPhoneError("");
     //   }
     // }
   }
@@ -309,7 +243,6 @@ const UserTable = () => {
       <div style={{ width: "30%" }}>
         <AdminSidebar />
       </div>
-
       <div style={{ width: "70%" }}>
         <form className="form" onSubmit={handleSubmit} style={{ marginLeft: '50%' }}>
           <h1 style={{ marginTop: "5%" }}>Add User  </h1>
@@ -320,8 +253,14 @@ const UserTable = () => {
             />
           </div> <br />
           <div>
-            <input type="number" className="form-control" placeholder="Mobile" name="mobile"
+            {/* <input type="number" className="form-control" placeholder="Mobile" name="mobile"
               value={phone} onChange={(e) => { setPhone(e.target.value) }}
+            /> */}
+            <PhoneInput
+              defaultCountry="IN"
+              value={phone}
+              onChange={setPhone}
+              placeholder="Enter Phone Number"
             />
           </div>
           <br />
@@ -335,30 +274,7 @@ const UserTable = () => {
             />
             <span className="text-danger">{emailError}</span>
             <br />
-            {/* <div>
-              <input className="form-control" placeholder="Password" name="password"
-                type="password"
-                value={password}
-                // onChange={(e) => setEmail(e.target.value)}
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}
-              /> <br />
-              <span className="text-danger">{passwordError}</span>
-            </div> */}
-            {/* <div>
-              <input className="form-control" placeholder="Confirm-password" name="Confirm-password"
-                type="password"
-                value={confirmPassword}
-                // onChange={(e) => setEmail(e.target.value)}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value)
-                }}
-              /> <br />
-              <span className="text-danger">{confirmPasswordError}</span>
-            </div> */}
           </div>
-
 
           <div className="form-group">
             <Button type="submit" className="rounded-pill my-3" color="secondary-blue"
@@ -397,9 +313,8 @@ const UserTable = () => {
                         <td>{item.details.email}</td>
 
                         <EditIcon onClick={() => { editUser(item) }} style={{ fontSize: "45px" }} />
-                        {/* <button onClick={() => { editUser(item) }}>edit</button> */}
                         <DeleteIcon onClick={() => { deleteUser(item.id) }} style={{ fontSize: "45px" }} />
-                        {/* <button onClick={() => { deleteUser(item.id) }}>delete</button> */}
+
                         <td> <button
                           //  disabled={item.details?.invite_sent}
                           onClick={() => { invite(item) }}>{!item.details?.invite_sent ? "Invite" : "user Invited "}</button></td>
@@ -419,3 +334,5 @@ const UserTable = () => {
 }
 
 export default UserTable;
+
+
