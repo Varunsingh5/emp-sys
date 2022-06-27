@@ -9,23 +9,24 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { auth, } from "../../firebase";
 import { query, collection, where, getDocs, } from "firebase/firestore";
+import { useUserAuth } from "../Context/UserAuthContext";
 
 import {
+  linkWithPhoneNumber,
   RecaptchaVerifier,
 
   signInWithEmailAndPassword,
   signInWithPhoneNumber,
+  // signInWithPhoneNumber,
 } from "firebase/auth";
 import "./UserLogin.css";
 import { db } from "../../firebase";
 import { getDoc, doc } from "firebase/firestore";
-import { useUserAuth } from "../Context/UserAuthContext"
-
 
 
 const UserLogin = () => {
   const [value, setValue] = useState(false);
-  const { setUpRecaptha } = useUserAuth();
+  // const { setUpRecaptha } = useUserAuth();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [phone, setPhone] = useState();
@@ -147,6 +148,9 @@ const UserLogin = () => {
           auth
         );
         recaptchaVerifier.render();
+        // const uid = " currentUser.id"
+       
+        // const response = await linkWithPhoneNumber(uid, number, recaptchaVerifier)
         const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
         // const response = await setUpRecaptha(number);
         setResult(response);

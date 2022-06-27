@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { db } from "../../../firebase"
 import { setDoc, doc, getDocs, collection, where, query, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
@@ -9,27 +7,26 @@ import moment from "moment";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AdminSidebar from "../pages/Sidebar/AdminSidebar"
-import validator from "validator";
 import PhoneInput from "react-phone-number-input";
 
-import { updatePassword, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
+import { AlternateEmail } from "@material-ui/icons";
 // import validator from 'validator';
 
 var CryptoJS = require("crypto-js");
 
 const UserTable = () => {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState("");
-  const [number, setNumber] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [loader, setLoader] = useState(false);
   const [userCollection, setUserCollection] = useState(null);
   const [edit, setEdit] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState("")
-  // const [status, setStatus] = useState("");
   const auth = getAuth();
 
   useEffect(() => {
@@ -51,7 +48,6 @@ const UserTable = () => {
       console.log("=error in snapshot", error);
     }
   }, []);
-
   const generateHash = () => {
     const array = new Uint32Array(8)
     const arr = window.crypto.getRandomValues(array)
@@ -72,6 +68,7 @@ const UserTable = () => {
       console.log(doc.id, " => ", doc.data());
       dd.push(doc.data());
     });
+
     if (edit) {
       if (dd.length > 0) {
         alert("number or email already register with other user")
@@ -98,6 +95,7 @@ const UserTable = () => {
       const q = query(collection(db, "userList"), where("isDeleted", "==", false), where("phone", "==", phone), where("email", "==", email));
       const querySnapshot = await getDocs(q);
       const dd = [];
+
       querySnapshot.forEach((doc) => {
         console.log(doc.id, " => ", doc.data());
         dd.push(doc.id);
@@ -109,35 +107,32 @@ const UserTable = () => {
         const res = await createUserWithEmailAndPassword(auth, email, generateHash()).then(async (e) => {
           const user = e?.user;
           console.log("user", user);
+
           await setDoc(doc(db, "userList", user.uid), {
             name: name,
             email: email,
             onlineState: false,
             role: "user",
-            // phone: phone,
+            phone: phone,
             isVerified: false,
             isDeleted: false,
             created_at: moment.now(),
             updated_at: moment.now(),
             deleted_at: null,
             invite_sent: false,
-            personal_details: [
-              {
-                about: "",
-                alernate_phone_number: "",
-                skills: "",
-                father_name: "",
-                mother_name: "",
-                hobbies: "",
-              },
-            ],
-            education: [
-              {
-                schooling: "",
-                collegae: "",
-              },
-            ]
             // ciphertext
+            personal_details:
+              [{
+                alternate_Email: "",
+                alternate_phoneNumber: "",
+              }],
+            education: [{
+              college: "",
+
+            }],
+            skills: [
+              { about: "" }
+            ]
           })
             .then((e) => {
               console.log("error on doc add ", e)
@@ -152,22 +147,19 @@ const UserTable = () => {
       }
     }
   }
-
   const invite = async (item) => {
     console.log("item",)
     const docRef = doc(db, "userList", item.id);
     console.log("docRef", docRef)
     const docSnap = await getDoc(docRef);
     console.log("docRef", docSnap.data().email)
-
-    // alert("invitation sent to the user")
+    alert("invitation sent to the user")
     if (docSnap.exists()) {
       console.log("4tsdynyjdryjnkdtr", docSnap.data().invite_sent)
       var data = [{ email: item.details.email, phone: item.details.phone }]
       // Encrypt
       var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'df1cbr4ytslujn30aokiqz9mvx6ehw25').toString();
       console.log(ciphertext, "hvnggngngnhghg");
-
       if (!docSnap.data()?.invite_sent) {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -190,7 +182,6 @@ const UserTable = () => {
     else {
     }
   }
-
   const deleteUser = async (id) => {
     alert("Are you sure!");
     const docRef = doc(db, 'userList', id);
@@ -206,7 +197,6 @@ const UserTable = () => {
         console.log("error on doc add user list", error)
       );
   }
-
   const editUser = (item) => {
     setEmail(item.details.email);
     setName(item.details.name);
@@ -216,7 +206,6 @@ const UserTable = () => {
     setSelectedDoc(item.id)
     setEdit(true);
   }
-
   const validateLogin = () => {
     if (!isUndefined(email)) {
       if (isEmpty(email)) {
@@ -228,13 +217,29 @@ const UserTable = () => {
         setEmailError("")
       }
     }
+    // if (!isUndefined(phone)) {
+    //   if (isEmpty(phone)) {
+    //     setPhone("phone is a required field");
+    //   } else if (
+    //     !validator.isStrongPassword(phone, {
+    //       minLength: 10,
+    //       minNumbers: 10,
+
+    //     })
+    //   ) {
+    //     setPhoneError("Please enter valid phone");
+    //   } else {
+    //     setPhoneError("");
+    //   }
+    // }
   }
   useEffect(() => {
     validateLogin();
   }, [email, phone]);
 
   return (
-    <div style={{ backgroundColor: "white" }}>
+    < div style={{ backgroundColor: "white" }}>
+
       <div style={{ width: "30%" }}>
         <AdminSidebar />
       </div>
@@ -248,6 +253,9 @@ const UserTable = () => {
             />
           </div> <br />
           <div>
+            {/* <input type="number" className="form-control" placeholder="Mobile" name="mobile"
+              value={phone} onChange={(e) => { setPhone(e.target.value) }}
+            /> */}
             <PhoneInput
               defaultCountry="IN"
               value={phone}
@@ -267,6 +275,7 @@ const UserTable = () => {
             <span className="text-danger">{emailError}</span>
             <br />
           </div>
+
           <div className="form-group">
             <Button type="submit" className="rounded-pill my-3" color="secondary-blue"
               style={{ backgroundColor: "blue", color: 'white', borderColor: "blue", padding: " 5px 32px 5px 26px", }}
@@ -275,18 +284,20 @@ const UserTable = () => {
               }  >
               {edit ? "Update" : "Add"}
             </Button>
+
           </div>
           <div  >
             <h1 style={{ textAlign: "center", marginTop: "20px" }}>User Table</h1>
           </div>
         </form>
+
         <Grid >
           <Grid >
             <table className="table table-borderless table-stripped" style={{ marginLeft: "30%" }} >
               <thead className="thead-light">
                 <tr >
                   <th>Full Name</th>
-                  <th>Phone</th>
+                  <th>Mobile</th>
                   <th>Email</th>
                   <th>Actions</th>
                   <th>Invite</th>
@@ -303,6 +314,7 @@ const UserTable = () => {
 
                         <EditIcon onClick={() => { editUser(item) }} style={{ fontSize: "45px" }} />
                         <DeleteIcon onClick={() => { deleteUser(item.id) }} style={{ fontSize: "45px" }} />
+
                         <td> <button
                           //  disabled={item.details?.invite_sent}
                           onClick={() => { invite(item) }}>{!item.details?.invite_sent ? "Invite" : "user Invited "}</button></td>
@@ -320,4 +332,7 @@ const UserTable = () => {
     </div>
   )
 }
+
 export default UserTable;
+
+

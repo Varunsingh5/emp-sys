@@ -38,8 +38,6 @@ export function UserAuthContextProvider({ children }) {
     recaptchaVerifier.render();
     return signInWithPhoneNumber(auth, number, recaptchaVerifier);
   }
-
-
   return (
     <userAuthContext.Provider
       value={{
