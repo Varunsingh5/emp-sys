@@ -61,8 +61,6 @@ const AdminLogin = () => {
           localStorage.setItem('user', JSON.stringify(e?.user))
           localStorage.setItem('role', docSnap.data().role);
           console.log(e)
-          // console.log("dfgdfgd", docSnap.data())
-          // navigate("/admin/dashboard")
         }).catch(err => alert("no email found", err))
 
     } catch (err) {
@@ -134,6 +132,7 @@ const AdminLogin = () => {
                 !(isEmpty(emailError) && isEmpty(passwordError))
               }
               onClick={logInWithEmailAndPassword}
+              style={{backgroundColor:"black", borderColor:"black"}}
             >
               Submit
             </button>

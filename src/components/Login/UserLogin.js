@@ -8,8 +8,10 @@ import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { auth, } from "../../firebase";
+<
 import { query, collection, where, getDocs, } from "firebase/firestore";
 import { useUserAuth } from "../Context/UserAuthContext";
+
 
 import {
   linkWithPhoneNumber,
@@ -23,10 +25,8 @@ import "./UserLogin.css";
 import { db } from "../../firebase";
 import { getDoc, doc } from "firebase/firestore";
 
-
 const UserLogin = () => {
   const [value, setValue] = useState(false);
-  // const { setUpRecaptha } = useUserAuth();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [phone, setPhone] = useState();
@@ -42,11 +42,8 @@ const UserLogin = () => {
   const [result, setResult] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [user, setUser] = useState(null)
-
-
   const login = async (e) => {
     e.preventDefault();
-
     try {
 
       console.log(password);
@@ -74,7 +71,6 @@ const UserLogin = () => {
       alert(err.message);
     }
   };
-
   // Validations
   const validateLogin = () => {
     if (!isUndefined(email)) {
@@ -86,7 +82,6 @@ const UserLogin = () => {
         setEmailError("");
       }
     }
-
     if (!isUndefined(password)) {
       if (isEmpty(password)) {
         setPasswordError("Password is a required field");
@@ -103,7 +98,6 @@ const UserLogin = () => {
       }
     }
   };
-
   useEffect(() => {
     validateLogin();
   }, [email, password]);
@@ -121,8 +115,6 @@ const UserLogin = () => {
   useEffect(() => {
     validatePhone();
   }, [phone]);
-
-
   const getOtp = async (e) => {
     e.preventDefault();
     console.log(number);
@@ -131,6 +123,17 @@ const UserLogin = () => {
       return setError("Please enter a valid phone number!");
     try {
       console.log(number);
+
+      // const recaptchaVerifier = new RecaptchaVerifier(
+      //   "recaptcha-container",
+      //   {},
+      //   auth
+      // );
+      // recaptchaVerifier.render();
+      // const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
+      // setResult(response);
+      // setFlag(true);
+
       const q = query(collection(db, "userList"), where("phone", "==", number), where("isDeleted", "==", false));
       const querySnapshot = await getDocs(q);
       let test;
@@ -178,9 +181,11 @@ const UserLogin = () => {
       setError(err.message);
     }
   };
+
   const handle = () => {
     signInWithEmailAndPassword(auth,)
   };
+
 
   if (phoneLogin) {
     return (
@@ -221,7 +226,6 @@ const UserLogin = () => {
               <span className="text-danger">{passwordError}</span>
 
             </div>
-
             <div className="mb-3">
               <div className="custom-control custom-checkbox">
                 <input
@@ -234,7 +238,6 @@ const UserLogin = () => {
                 </label>
               </div>
             </div>
-
             <div className="d-grid">
               <button
                 type="submit"
@@ -244,7 +247,11 @@ const UserLogin = () => {
                   isUndefined(password) ||
                   !(isEmpty(emailError) && isEmpty(passwordError))
                 }
+
+                style={{backgroundColor:"black", borderColor:"black"}}
+
                 onClick={handle}
+
               >
                 Login
               </button>
@@ -261,12 +268,10 @@ const UserLogin = () => {
       </div>
     );
   }
-
   else {
     return (
       <>
         <div className="p-4 box">
-
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={getOtp} style={{ display: !flag ? "block" : "none" }}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -295,7 +300,6 @@ const UserLogin = () => {
               Login with Email and Password
             </p>
           </Form>
-
           <Form onSubmit={verifyOtp} style={{ display: flag ? "block" : "none" }}>
             <Form.Group className="mb-3" controlId="formBasicOtp">
               <Form.Control
@@ -304,7 +308,6 @@ const UserLogin = () => {
                 onChange={(e) => setOtp(e.target.value)}
               />
             </Form.Group>
-
             <div className="button-right">
               <Link to="/">
                 <Button variant="secondary">Cancel</Button>
@@ -320,5 +323,4 @@ const UserLogin = () => {
     );
   }
 };
-
 export default UserLogin;
