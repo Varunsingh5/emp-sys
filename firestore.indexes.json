@@ -1,0 +1,11 @@
+{
+  "indexes": [{
+    "collectionGroup": "userList",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isDeleted", "order": "ASCENDING" },
+        { "fieldPath": "email", "order": "ASCENDING" }
+      ]
+  }],
+  "fieldOverrides": []
+}

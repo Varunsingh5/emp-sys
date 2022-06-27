@@ -3,10 +3,14 @@ import UserSidebar from "../pages/Sidebar/UserSidebar"
 
 const UserDashboard = () => {
     return (
-        <div>
-            <h1>WELCOME TO USER DASHBOARD</h1>
-            <UserSidebar />
-        </div>
+        <>
+            <div style={{ width: "30%" }}>
+                <UserSidebar />
+            </div>
+            <div style={{ width: "70%" }}>
+                <h1 style={{marginLeft:"50%"}}>Welome to user Dashboard</h1>
+            </div>
+        </>
     )
 }
 

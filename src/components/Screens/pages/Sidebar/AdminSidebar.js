@@ -57,7 +57,7 @@ const AdminSidebar = () => {
         <ProSidebar collapsed={menuCollapse}>
           <SidebarHeader>
             <div className="logotext">
-              <p>{menuCollapse ? "Logo" : "Squadminds"}</p>
+              <p>{menuCollapse ? "Squadminds" : "Squadminds"}</p>
             </div>
             <div className="closemenu" onClick={menuIconClick} style={{ marginBottom: "10px" }}>
               {menuCollapse ? (
