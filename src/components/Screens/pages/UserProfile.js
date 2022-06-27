@@ -22,6 +22,7 @@ const UserProfile = () => {
             <p>I <mark>design and develop</mark> services for customers of all sizes, specializing in creating stylish, modern websites, web services and online stores. My passion is to design digital user experiences through the bold interface and meaningful interactions.</p> <br/>
         </Grid>
         <Grid item md={4}>
+            
         <h3 style={{textShadow: '0 0 3px pink, 0 0 5px skyblue'}}>Contact</h3>
             <div className="media">
             <label>Phone No.:</label>
