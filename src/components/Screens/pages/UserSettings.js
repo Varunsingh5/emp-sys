@@ -2,7 +2,7 @@ import React from 'react'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-// import UserSidebar from "../pages/Sidebar/UserSidebar"
+import UserSidebar from "../pages/Sidebar/UserSidebar"
 import UserProfileSettings from './UserProfileSettings';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
@@ -40,25 +40,17 @@ const UserSettings = () => {
 
   return (
     <div >
-      {/* <Grid item md={4}>
-            <UserSidebar />
-        </Grid>
-        <Grid item md={4}>
-        <Button style={{backgroundColor:"orange", color:"black"}} onClick={handleOpen}>Edit Profile</Button>
-        </Grid>
-        <Grid item md={4}>
-            <Button style={{backgroundColor:"orange", color:"black"}} onClick={handleOpen}>Other Settings</Button> 
-        </Grid>  */}
+       <div style={{ width: "30%" }}>
+                <UserSidebar />
+            </div>
       <Box sx={{ flexGrow: 1 }} >
-
-        <Grid item md={4}>
-          {/* <UserSidebar /> */}
-        </Grid>
+      <Grid item md={4}>
+      </Grid>
         <Grid item md={4} >
           <Button style={{ backgroundColor: "orange", color: "black" }} onClick={handleOpen}>Edit Profile</Button>
         </Grid>
         <br/>
-        <Grid item md={4}>
+        <Grid item md={4} >
           <Button style={{ backgroundColor: "orange", color: "black" }} onClick={handleLogout}>Logout</Button>
         </Grid>
         <Modal

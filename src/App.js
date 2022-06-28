@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
-import { Routes, Route, Link, Router, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import AdminLogin from './components/Login/AdminLogin';
 import AdminDashboard from './components/Screens/Dashboard/AdminDashboard';
 import UserTable from './components/Screens/UserTable/UserTable';
@@ -51,19 +51,13 @@ function App() {
         <Route exact path="/admin/dashboard" element={role ? role === "user" ? <Navigate to="/admin/dashboard" /> : <AdminDashboard /> : <Navigate to="/" />} />
 
         <Route exact path="/user/setPassword" element={role ? role === "user" ? <Navigate to="/user/dashboard" /> : <Navigate to="/admin/dashboard" /> : <SetPassword />} />
-
-
-
         <Route exact path="/user/settings" element={<UserSettings />} />
         <Route exact path="/user/profile" element={<UserProfile/>}/>
         <Route exact path="/user/profile/settings" element={<UserProfileSettings/>}/>
-
         <Route exact path="/admin/user/table" element={<UserTable />} />
-
         <Route exact path="/user/*" element={<Navigate to="/" />} />
         <Route exact path="/admin/*" element={<Navigate to="/" />} />
         <Route exact path="/*" element={<Navigate to="/" />} />
-
         <Route exact path="user/Calendar" element={<Calendar1 />} />
         <Route exact path="user/leave/table" element={<LeaveTable />} />
       </Routes>
@@ -71,4 +65,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

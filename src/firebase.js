@@ -11,13 +11,21 @@ import {
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC-or-r3uUfcCQATYemKyzO0_kxc8kkZV0",
-  authDomain: "erp-management-a8e0c.firebaseapp.com",
-  projectId: "erp-management-a8e0c",
-  storageBucket: "erp-management-a8e0c.appspot.com",
-  messagingSenderId: "290875796750",
-  appId: "1:290875796750:web:74c22110f71d2cf81efb5f",
-  measurementId: "G-QGQQ6R6FX4"
+  apiKey: "AIzaSyCQ8Q2fEIJIM_tFE6KNhBOM_Zxv3K2xwnk",
+  authDomain: "assignment1-89cf0.firebaseapp.com",
+  projectId: "assignment1-89cf0",
+  storageBucket: "assignment1-89cf0.appspot.com",
+  messagingSenderId: "12701703518",
+  appId: "1:12701703518:web:93cc6139a5eb8ccd4043cf",
+  measurementId: "G-CVERWF5FHF"
+
+  // apiKey: "AIzaSyC-or-r3uUfcCQATYemKyzO0_kxc8kkZV0",
+  // authDomain: "erp-management-a8e0c.firebaseapp.com",
+  // projectId: "erp-management-a8e0c",
+  // storageBucket: "erp-management-a8e0c.appspot.com",
+  // messagingSenderId: "290875796750",
+  // appId: "1:290875796750:web:74c22110f71d2cf81efb5f",
+  // measurementId: "G-QGQQ6R6FX4"
 
 };
 

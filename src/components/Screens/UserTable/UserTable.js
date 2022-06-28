@@ -121,18 +121,7 @@ const UserTable = () => {
             deleted_at: null,
             invite_sent: false,
             // ciphertext
-            personal_details:
-              [{
-                alternate_Email: "",
-                alternate_phoneNumber: "",
-              }],
-            education: [{
-              college: "",
 
-            }],
-            skills: [
-              { about: "" }
-            ]
           })
             .then((e) => {
               console.log("error on doc add ", e)
