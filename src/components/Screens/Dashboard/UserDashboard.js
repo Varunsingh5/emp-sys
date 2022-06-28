@@ -18,7 +18,7 @@ const UserDashboard = () => {
         <Box sx={{ flexGrow: 1 }} >
            <Grid container spacing={2}>
               <Grid item md={4}>
-             <UserSidebar />
+             
               </Grid>   
               <Grid item md={4}>
         <div className="about-avatar">
