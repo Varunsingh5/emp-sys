@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-import React from 'react';
-=======
+
 
 //import useState hook to create menu collapse state
 import React, { useState } from "react";
->>>>>>> 0c2a7d4938f5bd2487d221a7388bd8d5d14831f6
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -15,25 +12,28 @@ import {
 } from 'cdbreact';
 import { useNavigate } from "react-router";
 import { logout, } from "../../../../firebase"
-<<<<<<< HEAD
-=======
+
 //import icons from react icons
 import { FaList, } from "react-icons/fa";
 import { FiHome, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
-//import sidebar css from react-pro-sidebar module and our custom css 
+//import sidebar css from react-pro-sidebar module and our custom css
 import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
->>>>>>> 0c2a7d4938f5bd2487d221a7388bd8d5d14831f6
 
+import {
+  ProSidebar,
+  Menu,
+  MenuItem,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarContent,
+} from "react-pro-sidebar";
 const UserSidebar = () => {
   const navigate = useNavigate();
-<<<<<<< HEAD
 
-  const handleLogout = async () => {
-    try {
-      await logout(navigate);
 
-=======
+
+
   //create initial menuCollapse state using useState hook
   const [menuCollapse, setMenuCollapse] = useState(false)
   //create a custom function that will change menucollapse state from false to true and true to false
@@ -44,15 +44,15 @@ const UserSidebar = () => {
   const handleLogout = async () => {
     try {
       await logout(navigate);
->>>>>>> 0c2a7d4938f5bd2487d221a7388bd8d5d14831f6
+
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  
+
   return (
-    <div style={{height:"286%", marginTop:"-7%"}}> 
+    <div style={{ height: "286%", marginTop: "-7%" }}>
       <CDBSidebar>
         <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>Squadminds</CDBSidebarHeader>
         <CDBSidebarContent>
@@ -65,8 +65,8 @@ const UserSidebar = () => {
       </CDBSidebar>
 
 
- 
-  
+
+
       <div id="header">
         <ProSidebar collapsed={menuCollapse}>
           <SidebarHeader>
@@ -99,7 +99,7 @@ const UserSidebar = () => {
         </ProSidebar>
 
       </div>
-      </div>
+    </div>
   );
 };
 

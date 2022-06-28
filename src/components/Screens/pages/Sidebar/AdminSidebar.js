@@ -107,10 +107,18 @@ import {
   CDBSidebarMenuItem,
   CDBSidebarFooter,
 } from 'cdbreact';
-import { useNavigate } from "react-router";
-import { logout, } from "../../../../firebase"
+
+import { FaList, } from "react-icons/fa";
+import { FiHome, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
 
 const AdminSidebar = () => {
+  //create initial menuCollapse state using useState hook
+  const [menuCollapse, setMenuCollapse] = useState(false)
+  //create a custom function that will change menucollapse state from false to true and true to false
+  const menuIconClick = () => {
+    //condition checking to change state from true to false and vice versa
+    menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+  };
 
   const navigate = useNavigate();
 
@@ -124,7 +132,7 @@ const AdminSidebar = () => {
   };
 
   return (
-   
+
 
     // <div style={{height:"336%", marginTop:"-7%"}}> 
     //   <CDBSidebar>
@@ -177,7 +185,7 @@ const AdminSidebar = () => {
           </SidebarFooter>
         </ProSidebar>
       </div>
-      </>
+    </>
   );
 };
 
