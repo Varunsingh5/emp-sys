@@ -123,11 +123,29 @@ const UserTable = () => {
             // ciphertext
 
           })
-            .then((e) => {
+            .then(async (e) => {
               console.log("error on doc add ", e)
               setEmail("");
               setPhone("");
               setName("");
+              await setDoc(doc(db, "userProfile", user.uid), {
+                isProfileSet: false,
+                personal_details: [{
+                  adhaarcardnumber: "",
+                  pancard: "",
+                }]
+                // ciphertext
+
+              })
+                .then((e) => {
+                  console.log("error on doc add ", e)
+
+
+                })
+                .catch((error) =>
+                  console.log("error on doc add user list", error)
+                );
+
             })
             .catch((error) =>
               console.log("error on doc add user list", error)

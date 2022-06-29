@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Link, Router, Navigate } from 'react-router-dom'
 import AdminLogin from './components/Login/AdminLogin';
 import AdminDashboard from './components/Screens/Dashboard/AdminDashboard';
 import UserTable from './components/Screens/UserTable/UserTable';
@@ -16,7 +16,6 @@ import UserSettings from './components/Screens/pages/UserSettings'
 import UserDashboard from "../src/components/Screens/Dashboard/UserDashboard";
 import Calendar1 from "../src/components/Screens/pages/Calendar1"
 import LeaveTable from './components/Screens/pages/LeaveTable';
-
 
 function App() {
   const [role, setRole] = useState(localStorage.getItem("role"));
@@ -58,6 +57,7 @@ function App() {
         <Route exact path="/user/*" element={<Navigate to="/" />} />
         <Route exact path="/admin/*" element={<Navigate to="/" />} />
         <Route exact path="/*" element={<Navigate to="/" />} />
+
         <Route exact path="user/Calendar" element={<Calendar1 />} />
         <Route exact path="user/leave/table" element={<LeaveTable />} />
       </Routes>
@@ -65,4 +65,4 @@ function App() {
   )
 }
 
-export default App;
+export default App

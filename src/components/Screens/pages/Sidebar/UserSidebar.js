@@ -86,8 +86,8 @@
 //import useState hook to create menu collapse state
 import React, { useState } from "react";
 
-// import { Routes, Route } from "react-router-dom"
-// import UserTable from "../../UserTable/UserTable";
+import { Routes, Route } from "react-router-dom"
+import UserTable from "../../UserTable/UserTable";
 
 //import react pro sidebar components
 import {
@@ -100,30 +100,31 @@ import {
 } from "react-pro-sidebar";
 import { useNavigate } from "react-router";
 import { logout, } from "../../../../firebase"
+
 //import icons from react icons
 import { FaList, FaRegHeart } from "react-icons/fa";
 import { FiHome, FiLogOut, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
-// import { RiPencilLine } from "react-icons/ri";
-// import { BiCog } from "react-icons/bi";
+import { RiPencilLine } from "react-icons/ri";
+import { BiCog } from "react-icons/bi";
+
 //import sidebar css from react-pro-sidebar module and our custom css 
 import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
 
-const UserSidebar = () => {
-  
-  const test=()=>{
-  navigate("/user/profile")
+const AdminSidebar = () => {
+  const handleClick=()=>{
+    navigate("/user/dashboard")
   }
-  
-  const test1=()=>{
-    navigate("/user/settings")
-    }
+  const handleSettings=()=>{
+  navigate("/user/settings")
+  }
+
 
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       await logout(navigate);
+
     } catch (error) {
       console.log(error.message);
     }
@@ -140,7 +141,6 @@ const UserSidebar = () => {
 
   return (
     <>
-    
       <div id="header">
         <ProSidebar collapsed={menuCollapse}>
           <SidebarHeader>
@@ -157,11 +157,11 @@ const UserSidebar = () => {
           </SidebarHeader>
           <SidebarContent>
             <Menu iconShape="square">
-              <MenuItem active={true} onClick={test} icon={<FiHome />}>
+              <MenuItem active={true} icon={<FiHome />} onClick={handleClick}>
                 Profile
               </MenuItem>
 
-              <MenuItem icon={<FaList />} onClick={test1}>Settings</MenuItem>
+              <MenuItem icon={<FaList />} onClick={handleSettings}>Settings</MenuItem>
               {/* <Route path="/admin/users" exact component={UserTable} /> */}
 
               {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}
@@ -172,11 +172,8 @@ const UserSidebar = () => {
           <SidebarFooter>
             <Menu iconShape="square">
               {/* <MenuItem icon={<FiLogOut />} onClick={handleLogout}>Logout</MenuItem> */}
-              <button className="btn btn-primary rounded-pill mx-auto logout-btn" type="submit" onClick={handleLogout}>
-                <span className="ml-1">
-                Logout
-                </span>
-                </button>
+              <button className="btn btn-primary rounded-pill mx-auto logout-btn" type="submit" onClick={handleLogout}><span className="ml-1">Logout</span></button>
+
             </Menu>
           </SidebarFooter>
         </ProSidebar>
@@ -184,4 +181,4 @@ const UserSidebar = () => {
     </>
   );
 };
-export default UserSidebar;
+export default AdminSidebar;
