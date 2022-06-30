@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AdminSidebar from "../pages/Sidebar/AdminSidebar"
 import PhoneInput from "react-phone-number-input";
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
 import { AlternateEmail } from "@material-ui/icons";
 // import validator from 'validator';
@@ -28,6 +28,7 @@ const UserTable = () => {
   const [edit, setEdit] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState("")
   const auth = getAuth();
+  let user;
 
   useEffect(() => {
     try {
@@ -105,7 +106,7 @@ const UserTable = () => {
       }
       else {
         const res = await createUserWithEmailAndPassword(auth, email, generateHash()).then(async (e) => {
-          const user = e?.user;
+          user = e?.user;
           console.log("user", user);
 
           await setDoc(doc(db, "userList", user.uid), {
@@ -130,10 +131,14 @@ const UserTable = () => {
               setName("");
               await setDoc(doc(db, "userProfile", user.uid), {
                 isProfileSet: false,
-                personal_details: [{
-                  adhaarcardnumber: "",
-                  pancard: "",
-                }]
+                Date_of_birth: "",
+                Father_Name: "",
+                Mother_Name: "",
+                Passport_Number: "",
+                Adhaar_Card: "",
+                Pan_Card: "",
+                Driving_License: "",
+                About: "",
                 // ciphertext
 
               })
@@ -151,6 +156,17 @@ const UserTable = () => {
               console.log("error on doc add user list", error)
             );
         }).catch((error => { }))
+        console.log(phone);
+        updateProfile(auth.currentUser, {
+          phoneNumber: phone,
+        })
+          .then((userRecord) => {
+            // See the UserRecord reference doc for the contents of userRecord.
+            console.log('Successfully updated user', userRecord);
+          })
+          .catch((error) => {
+            console.log('Error updating user:', error);
+          });
       }
     }
   }

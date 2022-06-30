@@ -8,7 +8,6 @@ import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { auth, firebaseDb, } from "../../firebase";
-
 import { query, collection, where, getDocs, setDoc, } from "firebase/firestore";
 import { useUserAuth } from "../Context/UserAuthContext";
 import {
@@ -179,7 +178,7 @@ const UserLogin = () => {
       setError(err.message);
     }
   };
-  
+
   const handle = () => {
     signInWithEmailAndPassword(auth,)
   };
@@ -246,7 +245,7 @@ const UserLogin = () => {
                 }
                 style={{ backgroundColor: "black", borderColor: "black" }}
                 onClick={handle}
-                >
+              >
                 Login
               </button>
               <br />

@@ -5,10 +5,10 @@ import Grid from '@mui/material/Grid';
 import UserProfile from '../pages/UserProfile';
 // import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../../../firebase';
-import { doc , getDoc} from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 const UserDashboard = () => {
- // const [open, setOpen] = React.useState(false);
+  // const [open, setOpen] = React.useState(false);
   // const handleOpen = () => setOpen(true);
   // const handleClose = () => setOpen(false);
 
@@ -59,7 +59,27 @@ const UserDashboard = () => {
 
   }
 
+  //   var authRef = auth();
+  //   authRef.onAuthStateChanged(auth(user) {
+  //       if (user) {
+  //           console.log('Display name onAuthStateChanged : '+user.displayName);
+  //           updateUserData();
+  //       } else {
+  //           console.log('not login');
+  //       }
+  //   });
 
+  //  const updateUserData = ()=>{
+  //     var userNow = firebase.auth().currentUser;
+  //       userNow.updateProfile({
+  //       displayName: "Jane Q. User",
+  //       photoURL: "https://example.com/jane-q-user/profile.jpg"
+  //     }).then(function() {
+  //       var displayName = userNow.displayName;
+  //       var photoURL = userNow.photoURL;
+  //     }, function(error) {
+  //     });
+  // }
 
 
   useEffect(() => {
