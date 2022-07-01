@@ -3,18 +3,46 @@ import "./UserProfileSettings.css";
 import { Link } from 'react-router-dom';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
-import Avatar from "react-avatar-edit";
 import { storage } from '../../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
 import { v4 } from 'uuid';
+import { async } from '@firebase/util';
 
 const UserProfileSettings = () => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('');
+  const [fatherName,setFatherName] = useState("");
+  const [motherName, setMotherName] = useState("");
+  const [dob,setDob] = useState(" ");
+  const [mobile,setMobile] = useState("");
+  const [passport,setPassport] = useState("");
+  const [adhaar,setAdhaar] = useState("");
+  const [pancard,setPancard] = useState("");
+  const [drivingLicense,setDrivingLicense] = useState("");
+  const [about,setAbout] = useState("");
+  const [position,setPosition] = useState("");
+  const [company,setCompany] = useState("");
+  const [schooling,setSchooling] = useState("");
+  const [graduation,setGraduation] = useState("");
+  const [address, setAddress] = useState("");
+  const [city,setCity] = useState("");
+  const [country, setCountry] = useState("");
+
+
   const options = useMemo(() => countryList().getData(), [])
   const changeHandler = value => {
     setValue(value)
   }
+  const register = async() => {
+   
+  }
 
+  const login = async() => {
+
+  }
+
+  const logout = async() => {
+
+  }
   //image uploading
   const [imageUpload, setImageUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
@@ -41,8 +69,7 @@ const UserProfileSettings = () => {
       })
     })
   }, [])
-
-
+  
   return (
     <div>
       <div className="container">
@@ -55,20 +82,19 @@ const UserProfileSettings = () => {
                     <div className="e-profile">
                       <div className="row">
                         <div className="col-12 col-sm-auto mb-3">
-                        
                           <input type="file" onChange={(event => { setImageUpload(event.target.files[0]) })} />
                           <button onClick={uploadImage}>Upload Image</button>
                           {imageList.map((url) => {
                             return <img src={url} />
                           })}
-                       
+
                         </div>
-                        <div className="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+                        {/* <div className="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                           <div className="text-center text-sm-left mb-2 mb-sm-0">
                             <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
                             <p className="mb-0">@johnny.s</p>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <ul className="nav nav-tabs">
                         <li className="nav-item"><a href="" className="active nav-link" style={{ fontWeight: "bolder" }}>Personal Details</a></li>
@@ -82,7 +108,9 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Father's Name</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" onChange={(event)=>{
+                                        setFatherName(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">

@@ -24,7 +24,6 @@ const UserDashboard = () => {
     const userData = docSnap.data();
     console.log(userData)
 
-
     if (!userData.isProfileSet) {
       console.log('false');
       // setOpen(true);
@@ -116,7 +115,7 @@ const UserDashboard = () => {
 
                 </Grid>
                 <Grid item md={4}>
-                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Contact</h3>
+                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Father's Name</h3>
                   <div className="media">
                     <label>Phone No.:</label>
                     <p>4552415789</p>
@@ -125,28 +124,7 @@ const UserDashboard = () => {
                   </div>
                 </Grid>
                 <Grid item md={4}>
-                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Office Contact</h3>
-                  <div className="media">
-                    <label>Phone No.:</label>
-                    <p>4552415789</p>
-                    <label>Email:</label>
-                    <p>abc@gmail.com</p>
-                  </div>
-                </Grid>
-                <Grid item md={4}>
-
-                </Grid>
-                <Grid item md={4}>
-                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Personal Details</h3>
-                  <div className="media">
-                    <label>Phone No.:</label>
-                    <p>4552415789</p>
-                    <label>Email:</label>
-                    <p>abc@gmail.com</p>
-                  </div>
-                </Grid>
-                <Grid item md={4}>
-                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Skills</h3>
+                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Mother's Name</h3>
                   <div className="media">
                     <label>Phone No.:</label>
                     <p>4552415789</p>
@@ -158,7 +136,7 @@ const UserDashboard = () => {
 
                 </Grid>
                 <Grid item md={4}>
-                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Hobbies</h3>
+                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>D.O.B</h3>
                   <div className="media">
                     <label>Phone No.:</label>
                     <p>4552415789</p>
@@ -167,7 +145,28 @@ const UserDashboard = () => {
                   </div>
                 </Grid>
                 <Grid item md={4}>
-                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Education</h3>
+                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Mobile</h3>
+                  <div className="media">
+                    <label>Phone No.:</label>
+                    <p>4552415789</p>
+                    <label>Email:</label>
+                    <p>abc@gmail.com</p>
+                  </div>
+                </Grid>
+                <Grid item md={4}>
+
+                </Grid>
+                <Grid item md={4}>
+                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Passport No</h3>
+                  <div className="media">
+                    <label>Phone No.:</label>
+                    <p>4552415789</p>
+                    <label>Email:</label>
+                    <p>abc@gmail.com</p>
+                  </div>
+                </Grid>
+                <Grid item md={4}>
+                  <h3 style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue' }}>Adhaar Card</h3>
                   <div className="media">
                     <label>Phone No.:</label>
                     <p>4552415789</p>
