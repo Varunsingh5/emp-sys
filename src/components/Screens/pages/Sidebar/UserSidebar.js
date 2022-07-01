@@ -101,7 +101,6 @@ import {
 import { useNavigate } from "react-router";
 import { logout, } from "../../../../firebase"
 
-
 //import icons from react icons
 import { FaList, FaRegHeart } from "react-icons/fa";
 import { FiHome, FiLogOut, FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
@@ -113,12 +112,15 @@ import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
 
 const AdminSidebar = () => {
-  const test=()=>{
-    console.log("poroff")
+  const handleClick=()=>{
+    navigate("/user/dashboard")
+  }
+  const handleSettings=()=>{
+  navigate("/user/settings")
   }
 
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const handleLogout = async () => {
     try {
       await logout(navigate);
@@ -155,11 +157,11 @@ const AdminSidebar = () => {
           </SidebarHeader>
           <SidebarContent>
             <Menu iconShape="square">
-              <MenuItem active={true} icon={<FiHome />}>
-                UserList
+              <MenuItem active={true} icon={<FiHome />} onClick={handleClick}>
+                Profile
               </MenuItem>
 
-              <MenuItem icon={<FaList />} onClick={test}>Profile</MenuItem>
+              <MenuItem icon={<FaList />} onClick={handleSettings}>Settings</MenuItem>
               {/* <Route path="/admin/users" exact component={UserTable} /> */}
 
               {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}
