@@ -6,7 +6,9 @@ import countryList from 'react-select-country-list'
 import { storage } from '../../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
 import { v4 } from 'uuid';
-import { async } from '@firebase/util';
+// import { async } from '@firebase/util';
+import { auth } from '../../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const UserProfileSettings = () => {
   const [value, setValue] = useState('');
@@ -26,23 +28,27 @@ const UserProfileSettings = () => {
   const [address, setAddress] = useState("");
   const [city,setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [user, setUser] = useState({});
 
 
   const options = useMemo(() => countryList().getData(), [])
   const changeHandler = value => {
     setValue(value)
   }
-  const register = async() => {
-   
-  }
+ 
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  })
 
-  const login = async() => {
+  // const login = async() => {
+  //   try {
+  //     const user = 
+  //   }
+  // }
 
-  }
+  // const logout = async() => {
 
-  const logout = async() => {
-
-  }
+  // }
   //image uploading
   const [imageUpload, setImageUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
@@ -108,7 +114,7 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Father's Name</label>
-                                      <input className="form-control" type="text" onChange={(event)=>{
+                                      <input className="form-control" type="text" value={fatherName} onChange={(event)=>{
                                         setFatherName(event.target.value);
                                       }} />
                                     </div>
@@ -116,7 +122,9 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Mother's Name</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={motherName} onChange={(event)=>{
+                                        setMotherName(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -124,13 +132,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>D.O.B</label>
-                                      <input className="form-control" type="number" />
+                                      <input className="form-control" type="text" value={dob} onChange={(event)=>{
+                                        setDob(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Mobile</label>
-                                      <input className="form-control" type="number" />
+                                      <input className="form-control" type="text" value={mobile} onChange={(event)=>{
+                                        setMobile(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -138,13 +150,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Passport No.</label>
-                                      <input className="form-control" type="number" />
+                                      <input className="form-control" type="text" value={passport} onChange={(event)=>{
+                                        setPassport(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Adhaar Card</label>
-                                      <input className="form-control" type="Number" />
+                                      <input className="form-control" type="text" value={adhaar} onChange={(event)=>{
+                                        setAdhaar(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -152,13 +168,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Pan Card</label>
-                                      <input className="form-control" type="number" />
+                                      <input className="form-control" type="text" value={pancard} onChange={(event)=>{
+                                        setPancard(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Driving License</label>
-                                      <input className="form-control" type="Number" />
+                                      <input className="form-control" type="text" value={drivingLicense} onChange={(event)=>{
+                                        setDrivingLicense(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -166,7 +186,9 @@ const UserProfileSettings = () => {
                                   <div className="col mb-3">
                                     <div className="form-group">
                                       <label>About</label>
-                                      <textarea className="form-control" rows="5"></textarea>
+                                      <textarea className="form-control" rows="5" value={about} onChange={(event)=>{
+                                        setAbout(event.target.value);
+                                      }}  ></textarea>
                                     </div>
                                   </div>
                                 </div>
@@ -177,13 +199,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Current Position</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={position} onChange={(event)=>{
+                                        setPosition(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Company Name</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={company} onChange={(event)=>{
+                                        setCompany(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -195,13 +221,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Schooling</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={schooling} onChange={(event)=>{
+                                        setSchooling(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Graduation</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={graduation} onChange={(event)=>{
+                                        setGraduation(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -213,7 +243,9 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Current Address</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={address} onChange={(event)=>{
+                                        setAddress(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                 </div>
@@ -221,7 +253,9 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>City</label>
-                                      <input className="form-control" type="text" />
+                                      <input className="form-control" type="text" value={city} onChange={(event)=>{
+                                        setCity(event.target.value);
+                                      }} />
                                     </div>
                                   </div>
                                   <div className="col">
