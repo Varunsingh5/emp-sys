@@ -2,64 +2,49 @@ import React from 'react'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-
 import UserSidebar from "../pages/Sidebar/UserSidebar"
 import UserProfileSettings from './UserProfileSettings';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
 import { logout } from "../../../firebase"
-
-
 const UserSettings = () => {
   const style = {
     position: "absolute",
-       overflow: "scroll",
-    top: "0%",
+    overflow: "scroll",
+    top: "50%",
     left: "50%",
     bottom: "-20%",
     transform: "translate(-50%, -50%)",
     width: "100%",
-    height: "10%",
+    height: "100%",
     bgColor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
     p: 4
   };
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
       await logout(navigate);
-
     } catch (error) {
       console.log(error.message);
     }
   };
-
   return (
     <div >
-      {/* <Grid item md={4}>
-            <UserSidebar />
-        </Grid>
-        <Grid item md={4}>
-        <Button style={{backgroundColor:"orange", color:"black"}} onClick={handleOpen}>Edit Profile</Button>
-        </Grid>
-        <Grid item md={4}>
-            <Button style={{backgroundColor:"orange", color:"black"}} onClick={handleOpen}>Other Settings</Button> 
-        </Grid>  */}
+      <div>
+        <UserSidebar />
+      </div>
       <Box sx={{ flexGrow: 1 }} >
-
         <Grid item md={4}>
-          {/* <UserSidebar /> */}
         </Grid>
         <Grid item md={4} >
           <Button style={{ backgroundColor: "orange", color: "black" }} onClick={handleOpen}>Edit Profile</Button>
         </Grid>
-        <br/>
+        <br />
         <Grid item md={4}>
           <Button style={{ backgroundColor: "orange", color: "black" }} onClick={handleLogout}>Logout</Button>
         </Grid>
@@ -77,5 +62,4 @@ const UserSettings = () => {
     </div>
   )
 }
-
 export default UserSettings;

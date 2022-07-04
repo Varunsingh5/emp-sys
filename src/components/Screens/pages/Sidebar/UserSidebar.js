@@ -113,9 +113,7 @@ import "./Sidebar.css";
 
 const AdminSidebar = () => {
 
-
   const navigate = useNavigate();
-
 
   const handleClick=()=>{
     navigate("/user/dashboard")
@@ -125,7 +123,6 @@ const AdminSidebar = () => {
   }
 
 
-  
   const handleLogout = async () => {
     try {
       await logout(navigate);

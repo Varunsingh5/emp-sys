@@ -13,7 +13,6 @@ import UserProfile from './components/Screens/pages/UserProfile';
 import UserProfileSettings from './components/Screens/pages/UserProfileSettings';
 import UserSettings from './components/Screens/pages/UserSettings'
 
-
 import UserDashboard from "../src/components/Screens/Dashboard/UserDashboard";
 import Calendar1 from "../src/components/Screens/pages/Calendar1";
 
@@ -32,8 +31,10 @@ function App() {
 
     });
 
+
     }, [])
     
+
 
   return (
     <div className="App">
@@ -55,10 +56,6 @@ function App() {
         <Route exact path="/admin/dashboard" element={role ? role === "user" ? <Navigate to="/admin/dashboard" /> : <AdminDashboard /> : <Navigate to="/" />} />
 
         <Route exact path="/user/setPassword" element={role ? role === "user" ? <Navigate to="/user/dashboard" /> : <Navigate to="/admin/dashboard" /> : <SetPassword />} />
-
-
-
-
 
 
         <Route exact path="/user/settings" element={<UserSettings />} />

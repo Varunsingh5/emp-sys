@@ -180,48 +180,7 @@ const UserLogin = () => {
       setError(err.message);
     }
 
-    // const q = query(collection(db, "userList"), where("phone", "==", number), where("isDeleted", "==", false));
-    // const querySnapshot = await getDocs(q);
-    // let test;
-    // let userId;
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   console.log(doc.id, " => ", doc.data(), "phone", "==", number);
-    //   userId = doc.id;
-    // });
-    // console.log(userId);
-    // setUserId(userId);
-    // makedocument();
   };
-  // const makedocument = async (e) => {
-
-  //   const q = query(collection(db, "userProfile"), where("isDeleted", "==", false), where("phone", "==", phone), where("email", "==", email));
-  //   const querySnapshot = await getDocs(q);
-  //   const dd = [];
-  //   querySnapshot.forEach((doc) => {
-  //     console.log(doc.id, " => ", doc.data());
-  //     dd.push(doc.id);
-  //   });
-  //   if (dd.length > 0) {
-  //     alert(" user already  exist ")
-  //   }
-  //   else {
-  //     const user = e?.user;
-  //     console.log("user", user);
-  //     await setDoc(doc(db, "userProfile", user.uid), {
-  //     
-  //     })
-  //       .then((e) => {
-  //         console.log("error on doc add ", e)
-  //         setEmail("");
-  //         setPhone("");
-  //       })
-  //       .catch((error) =>
-  //         console.log("error on doc add user list", error)
-  //       );
-  //   }
-  // }
-
 
   const handle = () => {
     signInWithEmailAndPassword(auth,)
