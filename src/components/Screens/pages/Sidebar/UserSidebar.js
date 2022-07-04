@@ -112,6 +112,9 @@ import "react-pro-sidebar/dist/css/styles.css";
 import "./Sidebar.css";
 
 const AdminSidebar = () => {
+
+  const navigate = useNavigate();
+
   const handleClick=()=>{
     navigate("/user/dashboard")
   }
@@ -120,7 +123,6 @@ const AdminSidebar = () => {
   }
 
 
-  const navigate = useNavigate();
   const handleLogout = async () => {
     try {
       await logout(navigate);
@@ -157,11 +159,13 @@ const AdminSidebar = () => {
           </SidebarHeader>
           <SidebarContent>
             <Menu iconShape="square">
+
               <MenuItem active={true} icon={<FiHome />} onClick={handleClick}>
                 Profile
               </MenuItem>
 
               <MenuItem icon={<FaList />} onClick={handleSettings}>Settings</MenuItem>
+
               {/* <Route path="/admin/users" exact component={UserTable} /> */}
 
               {/* <MenuItem icon={<FaRegHeart />}>Favourite</MenuItem> */}
