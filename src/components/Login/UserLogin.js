@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import validator from "validator";
@@ -7,9 +9,9 @@ import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { auth, } from "../../firebase";
+import { auth, firebaseDb, } from "../../firebase";
 
-import { query, collection, where, getDocs, } from "firebase/firestore";
+import { query, collection, where, getDocs, setDoc, } from "firebase/firestore";
 import { useUserAuth } from "../Context/UserAuthContext";
 
 
@@ -41,7 +43,8 @@ const UserLogin = () => {
   const [error, setError] = useState("");
   const [result, setResult] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState();
   const login = async (e) => {
     e.preventDefault();
     try {
@@ -155,14 +158,13 @@ const UserLogin = () => {
 
         // const response = await linkWithPhoneNumber(uid, number, recaptchaVerifier)
         const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
-        // const response = await setUpRecaptha(number);
+
         setResult(response);
         setFlag(true);
       }
       else {
         console.log('not');
       }
-
     } catch (err) {
       // alert("no. not register")
       setError(err.message);
@@ -182,22 +184,52 @@ const UserLogin = () => {
       setError(err.message);
     }
 
-    const q = query(collection(db, "userList"), where("phone", "==", number), where("isDeleted", "==", false));
-    const querySnapshot = await getDocs(q);
-    let test;
-    let userId;
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data(), "phone", "==", number);
-      userId = doc.id;
-    });
-    console.log(userId);
+    // const q = query(collection(db, "userList"), where("phone", "==", number), where("isDeleted", "==", false));
+    // const querySnapshot = await getDocs(q);
+    // let test;
+    // let userId;
+    // querySnapshot.forEach((doc) => {
+    //   // doc.data() is never undefined for query doc snapshots
+    //   console.log(doc.id, " => ", doc.data(), "phone", "==", number);
+    //   userId = doc.id;
+    // });
+    // console.log(userId);
+    // setUserId(userId);
+    // makedocument();
   };
+  // const makedocument = async (e) => {
+
+  //   const q = query(collection(db, "userProfile"), where("isDeleted", "==", false), where("phone", "==", phone), where("email", "==", email));
+  //   const querySnapshot = await getDocs(q);
+  //   const dd = [];
+  //   querySnapshot.forEach((doc) => {
+  //     console.log(doc.id, " => ", doc.data());
+  //     dd.push(doc.id);
+  //   });
+  //   if (dd.length > 0) {
+  //     alert(" user already  exist ")
+  //   }
+  //   else {
+  //     const user = e?.user;
+  //     console.log("user", user);
+  //     await setDoc(doc(db, "userProfile", user.uid), {
+  //     
+  //     })
+  //       .then((e) => {
+  //         console.log("error on doc add ", e)
+  //         setEmail("");
+  //         setPhone("");
+  //       })
+  //       .catch((error) =>
+  //         console.log("error on doc add user list", error)
+  //       );
+  //   }
+  // }
+
 
   const handle = () => {
     signInWithEmailAndPassword(auth,)
   };
-
 
   if (phoneLogin) {
     return (

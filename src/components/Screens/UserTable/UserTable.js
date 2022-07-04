@@ -8,16 +8,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AdminSidebar from "../pages/Sidebar/AdminSidebar"
 import PhoneInput from "react-phone-number-input";
-
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, RecaptchaVerifier, linkWithPhoneNumber } from "firebase/auth";
 import { isEmpty, isUndefined } from "lodash"
-import { AlternateEmail } from "@material-ui/icons";
-// import validator from 'validator';
 
 var CryptoJS = require("crypto-js");
 
 const UserTable = () => {
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState("");
@@ -28,6 +24,7 @@ const UserTable = () => {
   const [edit, setEdit] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState("")
   const auth = getAuth();
+  let user;
 
   useEffect(() => {
     try {
@@ -105,9 +102,8 @@ const UserTable = () => {
       }
       else {
         const res = await createUserWithEmailAndPassword(auth, email, generateHash()).then(async (e) => {
-          const user = e?.user;
+          user = e?.user;
           console.log("user", user);
-
           await setDoc(doc(db, "userList", user.uid), {
             name: name,
             email: email,
@@ -120,29 +116,56 @@ const UserTable = () => {
             updated_at: moment.now(),
             deleted_at: null,
             invite_sent: false,
-            // ciphertext
-            personal_details:
-              [{
-                alternate_Email: "",
-                alternate_phoneNumber: "",
-              }],
-            education: [{
-              college: "",
-
-            }],
-            skills: [
-              { about: "" }
-            ]
           })
-            .then((e) => {
+            .then(async (e) => {
               console.log("error on doc add ", e)
               setEmail("");
               setPhone("");
               setName("");
+              await setDoc(doc(db, "userProfile", user.uid), {
+                isProfileSet: false,
+                Photo_url: "",
+                About: "",
+                Father_Name : "",
+                Mother_Name : "",
+                DOB : "",
+                Passport: "",
+                Adhaar : "",
+                PanCard:"",
+                Mobile : "",
+                Position:"",
+                DrivingLicense:"" ,
+                Company : "",
+                Schooling: "",
+                Graduation: "" ,
+                Address: "",
+               City: "",
+               Country: "",    
+              })
+                .then((e) => {
+                  console.log("error on doc add ", e)
+                })
+                .catch((error) =>
+                  console.log("error on doc add user list", error)
+                );
             })
             .catch((error) =>
               console.log("error on doc add user list", error)
             );
+          if (!auth.currentUser.phoneNumber) {
+            let phoneNumber = window.prompt('Provide your phone number');
+            var appVerifier = new RecaptchaVerifier(
+              'recaptcha-container', { size: 'invisible' }, auth);
+            return linkWithPhoneNumber(auth.currentUser, phoneNumber, appVerifier)
+              .then(function (confirmationResult) {
+                // Ask user to provide the SMS code.
+                var code = window.prompt('Provide your SMS code');
+                // Complete sign-in.
+                return confirmationResult.confirm(code);
+              }).catch((e) => {
+                console.log(e);
+              });
+          }
         }).catch((error => { }))
       }
     }
@@ -217,21 +240,6 @@ const UserTable = () => {
         setEmailError("")
       }
     }
-    // if (!isUndefined(phone)) {
-    //   if (isEmpty(phone)) {
-    //     setPhone("phone is a required field");
-    //   } else if (
-    //     !validator.isStrongPassword(phone, {
-    //       minLength: 10,
-    //       minNumbers: 10,
-
-    //     })
-    //   ) {
-    //     setPhoneError("Please enter valid phone");
-    //   } else {
-    //     setPhoneError("");
-    //   }
-    // }
   }
   useEffect(() => {
     validateLogin();
@@ -239,7 +247,6 @@ const UserTable = () => {
 
   return (
     < div style={{ backgroundColor: "white" }}>
-
       <div style={{ width: "30%" }}>
         <AdminSidebar />
       </div>
@@ -253,9 +260,6 @@ const UserTable = () => {
             />
           </div> <br />
           <div>
-            {/* <input type="number" className="form-control" placeholder="Mobile" name="mobile"
-              value={phone} onChange={(e) => { setPhone(e.target.value) }}
-            /> */}
             <PhoneInput
               defaultCountry="IN"
               value={phone}
@@ -267,7 +271,6 @@ const UserTable = () => {
           <div>
             <input className="form-control" placeholder="Email" name="email"
               value={email}
-              // onChange={(e) => setEmail(e.target.value)}
               onChange={(e) => {
                 setEmail(e.target.value)
               }}
@@ -275,7 +278,7 @@ const UserTable = () => {
             <span className="text-danger">{emailError}</span>
             <br />
           </div>
-
+          <div id="recaptcha-container"></div>
           <div className="form-group">
             <Button type="submit" className="rounded-pill my-3" color="secondary-blue"
               style={{ backgroundColor: "blue", color: 'white', borderColor: "blue", padding: " 5px 32px 5px 26px", }}
@@ -284,13 +287,11 @@ const UserTable = () => {
               }  >
               {edit ? "Update" : "Add"}
             </Button>
-
           </div>
           <div  >
             <h1 style={{ textAlign: "center", marginTop: "20px" }}>User Table</h1>
           </div>
         </form>
-
         <Grid >
           <Grid >
             <table className="table table-borderless table-stripped" style={{ marginLeft: "30%" }} >
@@ -311,10 +312,8 @@ const UserTable = () => {
                         <td>{item.details.name}</td>
                         <td>{item.details.phone}</td>
                         <td>{item.details.email}</td>
-
                         <EditIcon onClick={() => { editUser(item) }} style={{ fontSize: "45px" }} />
                         <DeleteIcon onClick={() => { deleteUser(item.id) }} style={{ fontSize: "45px" }} />
-
                         <td> <button
                           //  disabled={item.details?.invite_sent}
                           onClick={() => { invite(item) }}>{!item.details?.invite_sent ? "Invite" : "user Invited "}</button></td>
@@ -332,7 +331,8 @@ const UserTable = () => {
     </div>
   )
 }
-
 export default UserTable;
+
+
 
 

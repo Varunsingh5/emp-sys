@@ -9,6 +9,7 @@ import {
 
 } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
+import {getStorage} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-or-r3uUfcCQATYemKyzO0_kxc8kkZV0",
@@ -25,6 +26,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const firebaseDb = getDatabase(app);
+export const storage = getStorage(app);
 
 const sendPasswordReset = async (email, navigate) => {
   try {
@@ -38,8 +40,6 @@ const sendPasswordReset = async (email, navigate) => {
     alert(err.message);
   }
 };
-
-
 
 
 const logout = async (navigate) => {

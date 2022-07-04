@@ -11,6 +11,7 @@ import { logout, } from "../../../firebase"
 const UserSettings = () => {
   const style = {
     position: "absolute",
+       overflow: "scroll",
     top: "0%",
     left: "50%",
     bottom: "-20%",
