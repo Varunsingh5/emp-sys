@@ -12,8 +12,10 @@ import { auth } from './firebase';
 import UserProfile from './components/Screens/pages/UserProfile';
 import UserProfileSettings from './components/Screens/pages/UserProfileSettings';
 import UserSettings from './components/Screens/pages/UserSettings'
+
 import UserDashboard from "../src/components/Screens/Dashboard/UserDashboard";
 import Calendar1 from "../src/components/Screens/pages/Calendar1";
+
 import LeaveTable from './components/Screens/pages/LeaveTable';
 
 
@@ -28,7 +30,11 @@ function App() {
       }, 3000);
 
     });
-  }, [])
+
+
+    }, [])
+    
+
 
   return (
     <div className="App">
@@ -50,10 +56,13 @@ function App() {
         <Route exact path="/admin/dashboard" element={role ? role === "user" ? <Navigate to="/admin/dashboard" /> : <AdminDashboard /> : <Navigate to="/" />} />
 
         <Route exact path="/user/setPassword" element={role ? role === "user" ? <Navigate to="/user/dashboard" /> : <Navigate to="/admin/dashboard" /> : <SetPassword />} />
+
+
         <Route exact path="/user/settings" element={<UserSettings />} />
         <Route exact path="/user/profile" element={<UserProfile />} />
         <Route exact path="/user/profile/settings" element={<UserProfileSettings />} />
         <Route exact path="/admin/user/table" element={<UserTable />} />
+
         <Route exact path="/user/*" element={<Navigate to="/" />} />
         <Route exact path="/admin/*" element={<Navigate to="/" />} />
         <Route exact path="/*" element={<Navigate to="/" />} />

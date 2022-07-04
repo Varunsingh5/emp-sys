@@ -7,7 +7,6 @@ import UserProfileSettings from './UserProfileSettings';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
 import { logout } from "../../../firebase"
-
 const UserSettings = () => {
   const style = {
     position: "absolute",
@@ -23,21 +22,17 @@ const UserSettings = () => {
     boxShadow: 24,
     p: 4
   };
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
       await logout(navigate);
-
     } catch (error) {
       console.log(error.message);
     }
   };
-
   return (
     <div >
       <div>
@@ -45,7 +40,6 @@ const UserSettings = () => {
       </div>
       <Box sx={{ flexGrow: 1 }} >
         <Grid item md={4}>
-
         </Grid>
         <Grid item md={4} >
           <Button style={{ backgroundColor: "orange", color: "black" }} onClick={handleOpen}>Edit Profile</Button>
@@ -68,5 +62,4 @@ const UserSettings = () => {
     </div>
   )
 }
-
 export default UserSettings;

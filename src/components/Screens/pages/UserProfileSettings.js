@@ -7,8 +7,12 @@ import { storage } from '../../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
 import { v4 } from 'uuid';
 // import { async } from '@firebase/util';
-import { auth } from '../../../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+// import { auth } from '../../../firebase';
+import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { update } from 'lodash';
+import { getAuth, linkWithPhoneNumber, onAuthStateChanged, RecaptchaVerifier } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
+import { auth, db } from '../../../firebase';
 
 const UserProfileSettings = () => {
   const [value, setValue] = useState('');
@@ -29,26 +33,76 @@ const UserProfileSettings = () => {
   const [city,setCity] = useState("");
   const [country, setCountry] = useState("");
   const [user, setUser] = useState({});
-
-
   const options = useMemo(() => countryList().getData(), [])
   const changeHandler = value => {
     setValue(value)
   }
- 
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  })
 
-  // const login = async() => {
-  //   try {
-  //     const user = 
-  //   }
-  // }
+  const [finalData,setFinalData] = useState();
 
-  // const logout = async() => {
+  const getProfile = async () => {
+    const user = auth.currentUser;
 
-  // }
+    // getting doc with using query phone no. in userList
+    // query lagni doc get krna iss phone number se userList
+    const ref = doc(db, "userProfile", user.uid)
+    const docSnap = await getDoc(ref);
+    if (docSnap.exists()) {
+      // Convert to City object
+      const data = docSnap.data();
+      // Use a City instance method
+      if (data?.isProfileSet == false) {
+        console.log('false');
+       }
+       else{
+        setFinalData(data) //set states for profile
+       }
+    } else {
+      console.log("No such document!");
+      return;
+    }
+  }
+  useEffect(() => {
+     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
+    if(currentuser){
+      getProfile()
+    }
+    });
+   }, [])
+
+   const getData = async ()=>{
+     const auth = getAuth();
+     console.log(auth.currentUser.uid);
+     const docRef = doc(db,'userProfile', auth.currentUser.uid);
+     const userProfile =  await getDoc(docRef);
+     const data = userProfile.data();
+     setFinalData(data);
+   }
+    
+   const formsubmit = async(e) => {
+     e.preventDefault();
+   
+    const user = auth.currentUser;
+    const ref = doc(db, "userProfile", user.uid)
+    const docSnap = await getDoc(ref);
+    if (docSnap.exists()) {
+      alert("done")
+        await updateDoc(doc(db, "userProfile", user.uid), {    
+          isProfileSet: true,
+          Date_of_birth: "",
+          Father_Name: "",
+          Mother_Name: "",
+          Passport_Number:"",
+          Adhaar_Card:"",
+          Pan_Card:"",
+          Driving_License: "",
+          About:"",
+        })
+    } else {
+      console.log("No such document!");
+    }
+    }
+
   //image uploading
   const [imageUpload, setImageUpload] = useState(null);
   const [imageList, setImageList] = useState([]);
@@ -75,7 +129,7 @@ const UserProfileSettings = () => {
       })
     })
   }, [])
-  
+
   return (
     <div>
       <div className="container">
@@ -95,36 +149,30 @@ const UserProfileSettings = () => {
                           })}
 
                         </div>
-                        {/* <div className="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-                          <div className="text-center text-sm-left mb-2 mb-sm-0">
-                            <h4 className="pt-sm-2 pb-1 mb-0 text-nowrap">John Smith</h4>
-                            <p className="mb-0">@johnny.s</p>
-                          </div>
-                        </div> */}
                       </div>
                       <ul className="nav nav-tabs">
                         <li className="nav-item"><a href="" className="active nav-link" style={{ fontWeight: "bolder" }}>Personal Details</a></li>
                       </ul>
                       <div className="tab-content pt-3">
                         <div className="tab-pane active">
-                          <form className="form" novalidate="">
+                          <form className="form" novalidate="" onSubmit={formsubmit}>
                             <div className="row">
                               <div className="col">
                                 <div className="row">
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Father's Name</label>
-                                      <input className="form-control" type="text" value={fatherName} onChange={(event)=>{
+                                      <input className="form-control" type="text" value={fatherName} onChange={(event) => {
                                         setFatherName(event.target.value);
-                                      }} />
+                                      }} /> 
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Mother's Name</label>
-                                      <input className="form-control" type="text" value={motherName} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={motherName} onChange={(event) => {
                                         setMotherName(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -132,17 +180,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>D.O.B</label>
-                                      <input className="form-control" type="text" value={dob} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={dob} onChange={(event) => {
                                         setDob(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Mobile</label>
-                                      <input className="form-control" type="text" value={mobile} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={mobile} onChange={(event) => {
                                         setMobile(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -150,17 +198,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Passport No.</label>
-                                      <input className="form-control" type="text" value={passport} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={passport} onChange={(event) => {
                                         setPassport(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Adhaar Card</label>
-                                      <input className="form-control" type="text" value={adhaar} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={adhaar} onChange={(event) => {
                                         setAdhaar(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -168,17 +216,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Pan Card</label>
-                                      <input className="form-control" type="text" value={pancard} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={pancard} onChange={(event) => {
                                         setPancard(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Driving License</label>
-                                      <input className="form-control" type="text" value={drivingLicense} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={drivingLicense} onChange={(event) => {
                                         setDrivingLicense(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -186,9 +234,9 @@ const UserProfileSettings = () => {
                                   <div className="col mb-3">
                                     <div className="form-group">
                                       <label>About</label>
-                                      <textarea className="form-control" rows="5" value={about} onChange={(event)=>{
+                                      {/* <textarea className="form-control" rows="5" value={about} onChange={(event) => {
                                         setAbout(event.target.value);
-                                      }}  ></textarea>
+                                      }}  ></textarea> */}
                                     </div>
                                   </div>
                                 </div>
@@ -199,17 +247,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Current Position</label>
-                                      <input className="form-control" type="text" value={position} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={position} onChange={(event) => {
                                         setPosition(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Company Name</label>
-                                      <input className="form-control" type="text" value={company} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={company} onChange={(event) => {
                                         setCompany(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -221,17 +269,17 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Schooling</label>
-                                      <input className="form-control" type="text" value={schooling} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={schooling} onChange={(event) => {
                                         setSchooling(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Graduation</label>
-                                      <input className="form-control" type="text" value={graduation} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={graduation} onChange={(event) => {
                                         setGraduation(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -243,9 +291,9 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>Current Address</label>
-                                      <input className="form-control" type="text" value={address} onChange={(event)=>{
+                                      {/* <input className="form-control" type="text" value={address} onChange={(event) => {
                                         setAddress(event.target.value);
-                                      }} />
+                                      }} /> */}
                                     </div>
                                   </div>
                                 </div>
@@ -253,8 +301,8 @@ const UserProfileSettings = () => {
                                   <div className="col">
                                     <div className="form-group">
                                       <label>City</label>
-                                      <input className="form-control" type="text" value={city} onChange={(event)=>{
-                                        setCity(event.target.value);
+                                      <input className="form-control" type="text" value={value} onChange={(event) => {
+                                        // setCity(event.target.value);
                                       }} />
                                     </div>
                                   </div>
@@ -271,7 +319,7 @@ const UserProfileSettings = () => {
                             <div style={{ marginTop: "2%" }}>
                               <div className="row">
                                 <div className="col d-flex justify-content-end">
-                                  <button className="btn btn-primary" type="submit">Save Changes</button>&nbsp;
+                                <button className="btn btn-primary" type="submit">Update</button>
                                   <Link to="/user/dashboard">
                                     <button className="btn btn-primary" type="submit">Cancel</button>
                                   </Link>

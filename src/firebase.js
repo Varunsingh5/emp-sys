@@ -45,9 +45,6 @@ export {
   auth,
   db,
   firebaseDb,
-  // authRef,
-  // logInWithEmailAndPassword,
-  // registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
 };
