@@ -6,13 +6,9 @@ import countryList from 'react-select-country-list'
 import { storage } from '../../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
 import { v4 } from 'uuid';
-// import { async } from '@firebase/util';
-// import { auth } from '../../../firebase';
-import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
-import { update } from 'lodash';
-import { getAuth, linkWithPhoneNumber, onAuthStateChanged, RecaptchaVerifier } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
+import { async } from '@firebase/util';
 import { auth, db } from '../../../firebase';
+import Grid from '@mui/material/Grid';
 
 const UserProfileSettings = () => {
   const [value, setValue] = useState('');
@@ -32,76 +28,43 @@ const UserProfileSettings = () => {
   const [address, setAddress] = useState("");
   const [city,setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [user, setUser] = useState({});
+  const [details,setDetails]=useState([]);
+
+  const [companyName, setCompanyName] = useState("");
+  const [postGraduation, setPostGraduation] = useState("");
+  const [marital, setMarital] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [parentContact, setParentContact] = useState("");
+  const [vechileNumber, setVechileNumber] = useState("");
+  const [vechileType, setVechileType] = useState("");
+  const [companyEmail, setCompanyEmail] = useState("");
+  const [currentAddress, setCurrentAddress] = useState("");
+  const [currentCity, setCurrentCity] = useState("");
+  const [currentCountry, setCurrentCountry] = useState("");
+  const [permanentAddress, setPermanentAddress] = useState("");
+  const [permanentCity, setPermanentCity] = useState("");
+  const [permanentCountry, setPermanentCountry] = useState("");
+
+
+
+
   const options = useMemo(() => countryList().getData(), [])
   const changeHandler = value => {
     setValue(value)
   }
+  
+  const fetchDetails=async()=>{
+    const response=db.collection('userList');
+    const data=await response.get();
+    data.docs.forEach(item=>{
+     setDetails([...details,item.data()])
+    })
+}
 
-  const [finalData,setFinalData] = useState();
+useEffect(() => {
+  fetchDetails();
+}, [])
 
-  const getProfile = async () => {
-    const user = auth.currentUser;
-
-    // getting doc with using query phone no. in userList
-    // query lagni doc get krna iss phone number se userList
-    const ref = doc(db, "userProfile", user.uid)
-    const docSnap = await getDoc(ref);
-    if (docSnap.exists()) {
-      // Convert to City object
-      const data = docSnap.data();
-      // Use a City instance method
-      if (data?.isProfileSet == false) {
-        console.log('false');
-       }
-       else{
-        setFinalData(data) //set states for profile
-       }
-    } else {
-      console.log("No such document!");
-      return;
-    }
-  }
-  useEffect(() => {
-     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
-    if(currentuser){
-      getProfile()
-    }
-    });
-   }, [])
-
-   const getData = async ()=>{
-     const auth = getAuth();
-     console.log(auth.currentUser.uid);
-     const docRef = doc(db,'userProfile', auth.currentUser.uid);
-     const userProfile =  await getDoc(docRef);
-     const data = userProfile.data();
-     setFinalData(data);
-   }
-    
-   const formsubmit = async(e) => {
-     e.preventDefault();
-   
-    const user = auth.currentUser;
-    const ref = doc(db, "userProfile", user.uid)
-    const docSnap = await getDoc(ref);
-    if (docSnap.exists()) {
-      alert("done")
-        await updateDoc(doc(db, "userProfile", user.uid), {    
-          isProfileSet: true,
-          Date_of_birth: "",
-          Father_Name: "",
-          Mother_Name: "",
-          Passport_Number:"",
-          Adhaar_Card:"",
-          Pan_Card:"",
-          Driving_License: "",
-          About:"",
-        })
-    } else {
-      console.log("No such document!");
-    }
-    }
 
   //image uploading
   const [imageUpload, setImageUpload] = useState(null);
@@ -129,7 +92,7 @@ const UserProfileSettings = () => {
       })
     })
   }, [])
-
+  
   return (
     <div>
       <div className="container">
@@ -150,183 +113,138 @@ const UserProfileSettings = () => {
 
                         </div>
                       </div>
-                      <ul className="nav nav-tabs">
-                        <li className="nav-item"><a href="" className="active nav-link" style={{ fontWeight: "bolder" }}>Personal Details</a></li>
-                      </ul>
+                     
                       <div className="tab-content pt-3">
                         <div className="tab-pane active">
-                          <form className="form" novalidate="" onSubmit={formsubmit}>
-                            <div className="row">
-                              <div className="col">
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Father's Name</label>
-                                      <input className="form-control" type="text" value={fatherName} onChange={(event) => {
-                                        setFatherName(event.target.value);
-                                      }} /> 
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Mother's Name</label>
-                                      {/* <input className="form-control" type="text" value={motherName} onChange={(event) => {
-                                        setMotherName(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>D.O.B</label>
-                                      {/* <input className="form-control" type="text" value={dob} onChange={(event) => {
-                                        setDob(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Mobile</label>
-                                      {/* <input className="form-control" type="text" value={mobile} onChange={(event) => {
-                                        setMobile(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Passport No.</label>
-                                      {/* <input className="form-control" type="text" value={passport} onChange={(event) => {
-                                        setPassport(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Adhaar Card</label>
-                                      {/* <input className="form-control" type="text" value={adhaar} onChange={(event) => {
-                                        setAdhaar(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Pan Card</label>
-                                      {/* <input className="form-control" type="text" value={pancard} onChange={(event) => {
-                                        setPancard(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Driving License</label>
-                                      {/* <input className="form-control" type="text" value={drivingLicense} onChange={(event) => {
-                                        setDrivingLicense(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="row">
-                                  <div className="col mb-3">
-                                    <div className="form-group">
-                                      <label>About</label>
-                                      {/* <textarea className="form-control" rows="5" value={about} onChange={(event) => {
-                                        setAbout(event.target.value);
-                                      }}  ></textarea> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <ul className="nav nav-tabs">
-                                  <li className="nav-item"><a href="" className="active nav-link" style={{ fontWeight: "bolder" }}>Position</a></li>
-                                </ul>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Current Position</label>
-                                      {/* <input className="form-control" type="text" value={position} onChange={(event) => {
-                                        setPosition(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Company Name</label>
-                                      {/* <input className="form-control" type="text" value={company} onChange={(event) => {
-                                        setCompany(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <br />
-                                <ul className="nav nav-tabs">
-                                  <li className="nav-item"><a href="" className="active nav-link" style={{ fontWeight: "bolder" }}>Education</a></li>
-                                </ul>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Schooling</label>
-                                      {/* <input className="form-control" type="text" value={schooling} onChange={(event) => {
-                                        setSchooling(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Graduation</label>
-                                      {/* <input className="form-control" type="text" value={graduation} onChange={(event) => {
-                                        setGraduation(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <br />
-                                <ul className="nav nav-tabs">
-                                  <li className="nav-item"><a href="" className="active nav-link" style={{ fontWeight: "bolder" }}>Address</a></li>
-                                </ul>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Current Address</label>
-                                      {/* <input className="form-control" type="text" value={address} onChange={(event) => {
-                                        setAddress(event.target.value);
-                                      }} /> */}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="row">
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>City</label>
-                                      <input className="form-control" type="text" value={value} onChange={(event) => {
-                                        // setCity(event.target.value);
-                                      }} />
-                                    </div>
-                                  </div>
-                                  <div className="col">
-                                    <div className="form-group">
-                                      <label>Country</label>
-                                      <Select options={options} value={value} onChange={changeHandler} />
-                                    </div>
-                                  </div>
-                                </div>
-
-                              </div>
-                            </div>
-                            <div style={{ marginTop: "2%" }}>
+                        <form className="form" novalidate=""  >
+          <div >
+            <Grid container spacing={3}>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }} >
+                <label>Adhaar</label>
+                <input className="form-control" onChange={(e) => setAdhaar(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <label>Pancard</label>
+                <input className="form-control" onChange={(e) => setPancard(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>DrivingLicense</label>
+                <input className="form-control" onChange={(e) => setDrivingLicense(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Passport</label>
+                <input className="form-control" onChange={(e) => setPassport(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} >
+                <label>Position</label>
+                <input className="form-control" rows="1" onChange={(e) => setPosition(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Date Of Birth</label>
+                <input className="form-control" onChange={(e) => setDob(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Marital-Status</label>
+                <input className="form-control" onChange={(e) => setMarital(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Blood-Group</label>
+                <input className="form-control" onChange={(e) => setBloodGroup(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Mother Name</label>
+                <input className="form-control" onChange={(e) => setMotherName(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Father Name</label>
+                <input className="form-control" onChange={(e) => setFatherName(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Parent-Contact</label>
+                <input className="form-control" onChange={(e) => setParentContact(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Vechile-Type</label>
+                <input className="form-control" onChange={(e) => setVechileType(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Vechile-Number</label>
+                <input className="form-control" onChange={(e) => setVechileNumber(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Company-Name</label>
+                <input className="form-control" onChange={(e) => setCompanyName(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>Mobile-Number</label>
+                <input className="form-control" onChange={(e) => setMobile(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Company-Email-Id</label>
+                <input className="form-control" onChange={(e) => setCompanyEmail(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ }}>
+                <label>Schooling</label>
+                <input className="form-control" onChange={(e) => setSchooling(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} >
+                <label>Graduation</label>
+                <input className="form-control" onChange={(e) => setGraduation(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>PostGraduation</label>
+                <input className="form-control" onChange={(e) => setPostGraduation(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <label>Current-Address</label>
+                <input className="form-control" onChange={(e) => setCurrentAddress(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <label>CurrentCity</label>
+                <input className="form-control" onChange={(e) => setCurrentCity(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Current-Country</label>
+                <input className="form-control" onChange={(e) => setCurrentCountry(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} >
+                <label>Permanent-Address</label>
+                <input className="form-control" onChange={(e) => setPermanentAddress(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} >
+                <label>Permanent-City</label>
+                <input className="form-control" onChange={(e) => setPermanentCity(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
+                <label>Permanent-Country</label>
+                <input className="form-control" onChange={(e) => setPermanentCountry(e.target.value)} />
+              </Grid>
+              <Grid item xs={6} sm={3} style={{}}>
+                <label>About</label>
+                <textarea className="form-control" rows="5" onChange={(e) => setAbout(e.target.value)}></textarea>
+              </Grid>
+            </Grid>
+          </div>
+          <div className="row">
+          <div style={{ marginTop: "2%" }}>
                               <div className="row">
                                 <div className="col d-flex justify-content-end">
-                                <button className="btn btn-primary" type="submit">Update</button>
+                                  <button className="btn btn-primary" type="submit">Save Changes</button>&nbsp;
                                   <Link to="/user/dashboard">
                                     <button className="btn btn-primary" type="submit">Cancel</button>
                                   </Link>
                                 </div>
                               </div>
                             </div>
-                          </form>
+          </div>
+        </form>
+
+
+
+                        
+                          
+                           
+                        
                         </div>
                       </div>
                     </div>
