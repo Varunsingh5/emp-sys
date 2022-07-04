@@ -1,13 +1,9 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  sendPasswordResetEmail,
-  signOut,
-} from "firebase/auth";
-import {
-  getFirestore,
 
-} from "firebase/firestore";
+
+import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
 import { getDatabase } from "firebase/database";
 import {getStorage} from "firebase/storage";
 
@@ -19,7 +15,6 @@ const firebaseConfig = {
   messagingSenderId: "290875796750",
   appId: "1:290875796750:web:74c22110f71d2cf81efb5f",
   measurementId: "G-QGQQ6R6FX4"
-
 };
 
 const app = initializeApp(firebaseConfig);
@@ -41,7 +36,6 @@ const sendPasswordReset = async (email, navigate) => {
   }
 };
 
-
 const logout = async (navigate) => {
   // const currentRole = await localStorage.getItem("role");
   localStorage.clear();
@@ -54,10 +48,6 @@ export {
   auth,
   db,
   firebaseDb,
-
-  // authRef,
-  // logInWithEmailAndPassword,
-  // registerWithEmailAndPassword,
   sendPasswordReset,
   logout,
 };

@@ -2,11 +2,13 @@ import React from 'react'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-// import UserSidebar from "../pages/Sidebar/UserSidebar"
+
+import UserSidebar from "../pages/Sidebar/UserSidebar"
 import UserProfileSettings from './UserProfileSettings';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router";
-import { logout, } from "../../../firebase"
+import { logout } from "../../../firebase"
+
 
 const UserSettings = () => {
   const style = {
@@ -29,7 +31,6 @@ const UserSettings = () => {
   const handleClose = () => setOpen(false);
 
   const navigate = useNavigate();
-
   const handleLogout = async () => {
     try {
       await logout(navigate);

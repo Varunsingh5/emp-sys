@@ -68,7 +68,11 @@ const AdminLogin = () => {
       alert(err.message);
     }
   };
+<<<<<<< HEAD
   const navigate = useNavigate();
+=======
+  
+>>>>>>> 45dbfb3e4c3ef8a2fcaab36fac7f8b9c066a598a
 
   const user = () => {
     navigate("/")

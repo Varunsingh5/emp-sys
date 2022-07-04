@@ -10,15 +10,11 @@ import { Button } from "react-bootstrap";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { auth, firebaseDb, } from "../../firebase";
-
 import { query, collection, where, getDocs, setDoc, } from "firebase/firestore";
 import { useUserAuth } from "../Context/UserAuthContext";
-
-
 import {
   linkWithPhoneNumber,
   RecaptchaVerifier,
-
   signInWithEmailAndPassword,
   signInWithPhoneNumber,
   // signInWithPhoneNumber,
@@ -41,6 +37,7 @@ const UserLogin = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [error, setError] = useState("");
+  const [userError, setUserError] = useState("");
   const [result, setResult] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [user, setUser] = useState(null);
@@ -68,10 +65,10 @@ const UserLogin = () => {
           console.log("dfgdfgd", docSnap.data())
           navigate("/user/dashboard");
         })
-        .catch((err) => alert("user not found", err));
+        .catch((err) => setError("Your Username or Password is Incorrect", err));
     } catch (err) {
       console.error(err);
-      alert(err.message);
+      setError(err.message);
     }
   };
   // Validations
@@ -155,7 +152,6 @@ const UserLogin = () => {
         );
         recaptchaVerifier.render();
         // const uid = " currentUser.id"
-
         // const response = await linkWithPhoneNumber(uid, number, recaptchaVerifier)
         const response = await signInWithPhoneNumber(auth, number, recaptchaVerifier);
 
@@ -291,11 +287,8 @@ const UserLogin = () => {
                   isUndefined(password) ||
                   !(isEmpty(emailError) && isEmpty(passwordError))
                 }
-
                 style={{ backgroundColor: "black", borderColor: "black" }}
-
                 onClick={handle}
-
               >
                 Login
               </button>
@@ -316,7 +309,7 @@ const UserLogin = () => {
     return (
       <>
         <div className="p-4 box">
-          {error && <Alert variant="danger">{error}</Alert>}
+          {error && <errorMessage variant="danger">{error}</errorMessage>}
           <Form onSubmit={getOtp} style={{ display: !flag ? "block" : "none" }}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <PhoneInput
