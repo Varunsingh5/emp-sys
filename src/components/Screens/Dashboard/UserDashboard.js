@@ -1,6 +1,3 @@
-
-
-
 import React, { useState,useEffect } from 'react'
 import UserSidebar from "../pages/Sidebar/UserSidebar";
 import Box from '@mui/material/Box';
@@ -13,6 +10,9 @@ import { collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } fro
 import { update } from 'lodash';
 import { getAuth, linkWithPhoneNumber, onAuthStateChanged, RecaptchaVerifier } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
+import { storage } from '../../../firebase';
+import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
+import { v4 } from 'uuid';
 
 
 const UserDashboard = () => {
@@ -37,8 +37,8 @@ const UserDashboard = () => {
   const [marital, setMarital] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
   const [parentContact, setParentContact] = useState("");
-  const [vechileNumber, setVechileNumber] = useState("");
-  const [vechileType, setVechileType] = useState("");
+  const [vehicleNumber, setvehicleNumber] = useState("");
+  const [vehicleType, setvehicleType] = useState("");
   const [companyEmail, setCompanyEmail] = useState("");
   const [currentAddress, setCurrentAddress] = useState("");
   const [currentCity, setCurrentCity] = useState("");
@@ -46,8 +46,32 @@ const UserDashboard = () => {
   const [permanentAddress, setPermanentAddress] = useState("");
   const [permanentCity, setPermanentCity] = useState("");
   const [permanentCountry, setPermanentCountry] = useState("");
-
-
+   //image uploading
+   const [imageUpload, setImageUpload] = useState(null);
+   const [imageList, setImageList] = useState([]);
+ 
+   const imageListRef = ref(storage, "images/")
+   const uploadImage = () => {
+     if (imageUpload == null) return;
+     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`)
+     uploadBytesResumable(imageRef, imageUpload).then((snapshot) => {
+       getDownloadURL(snapshot.ref).then((url) => {
+         setImageList(() => [url])
+       })
+     })
+   };
+ 
+   useEffect(() => {
+     list(imageListRef).then((response) => {
+       console.log(response)
+       response.items.forEach((item) => {
+         getDownloadURL(item).then((url) => {
+           setImageList(() => [url]);
+         })
+       })
+     })
+   }, [])
+   
 
   const customStyles = {
     content: {
@@ -59,11 +83,6 @@ const UserDashboard = () => {
       transform: 'translate(-50%, -50%)',
     }
   };
-
-  // const [open, setOpen] = React.useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
-  // const [ isProfileSet, setIsProfileSet] = useState(false);
 
   const getProfile = async () => {
     // const auth= getAuth();
@@ -139,8 +158,8 @@ const UserDashboard = () => {
           Marital: marital,
           BloodGroup: bloodGroup,
           ParentContact: parentContact,
-          VechileNumber: vechileNumber,
-          VechileType: vechileType,
+          vehicleNumber: vehicleNumber,
+          vehicleType: vehicleType,
           CompanyEmail: companyEmail,
           CurrentAddress: currentAddress,
           CurrentCity: currentCity,
@@ -155,9 +174,7 @@ const UserDashboard = () => {
     setIsOpen(false)
 
   }
-
  
-
   return (
     <>
     <div style={{ width: "30%" }}>
@@ -169,7 +186,9 @@ const UserDashboard = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <div className="about-avatar" style={{ textAlign: "center", marginLeft: "50%" }}>
-                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="" />
+              {imageList.map((url) => {
+                return <img src={url} />
+                 })}
               </div>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -183,9 +202,9 @@ const UserDashboard = () => {
               <h5 style={{ marginLeft: "50%" }}>Company-Email-Id :-   {finalData?.CompanyEmail}</h5>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <h3 class="dark-color" style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue', textAlign: "center", marginLeft: "50%" }}>Vechile Information :-</h3>
-              <h5 style={{ textAlign: "center", marginLeft: "50%" }}>Vechile-type :-   {finalData?.VechileType}</h5>
-              <h5 style={{ textAlign: "center", marginLeft: "50%" }}>Vechile Number :-   {finalData?.VechileNumber}</h5>
+              <h3 class="dark-color" style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue', textAlign: "center", marginLeft: "50%" }}>vehicle Information :-</h3>
+              <h5 style={{ textAlign: "center", marginLeft: "50%" }}>vehicle-type :-   {finalData?.vehicleType}</h5>
+              <h5 style={{ textAlign: "center", marginLeft: "50%" }}>vehicle Number :-   {finalData?.vehicleNumber}</h5>
             </Grid>
             <Grid item xs={12} sm={6}>
               <h3 class="dark-color" style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue', textAlign: "center", marginLeft: "50%" }}>Current-address</h3>
@@ -211,13 +230,13 @@ const UserDashboard = () => {
               <h5 style={{ marginLeft: "50%" }}>Marital-Status :- {finalData?.Marital} </h5>
               <h5 style={{ marginLeft: "50%" }}>Blood-Group :- {finalData?.BloodGroup} </h5>
               {/* <h5 style={{ marginLeft:"50%" }}> city:-</h5>
-<h5 style={{ marginLeft:"50%" }}> Country:-</h5> */}
+              <h5 style={{ marginLeft:"50%" }}> Country:-</h5> */}
             </Grid>
             <Grid item xs={12} sm={6}>
               <h3 class="dark-color" style={{ textShadow: '0 0 3px pink, 0 0 5px skyblue', textAlign: "center", marginLeft: "50%" }}>Id Verification</h3>
               <h5 style={{ textAlign: "center", marginLeft: "50%" }}>Adhaar card number :-  {finalData?.Adhaar}</h5>
               <h5 style={{ textAlign: "center", marginLeft: "50%" }}>Passport number :- {finalData?.Passport}</h5>
-              <h5 style={{ textAlign: "center", marginLeft: "50%" }}>Pancard card number :- {finalData?.Pancard}</h5>
+              <h5 style={{ textAlign: "center", marginLeft: "50%" }}>Pancard number :- {finalData?.Pancard}</h5>
               <h5 style={{ textAlign: "center", marginLeft: "50%" }}>DrivingLicense :- {finalData?.DrivingLicense}</h5>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -285,12 +304,12 @@ const UserDashboard = () => {
                 <input className="form-control" onChange={(e) => setParentContact(e.target.value)} />
               </Grid>
               <Grid item xs={6} sm={3} style={{}}>
-                <label>Vechile-Type</label>
-                <input className="form-control" onChange={(e) => setVechileType(e.target.value)} />
+                <label>vehicle-Type</label>
+                <input className="form-control" onChange={(e) => setvehicleType(e.target.value)} />
               </Grid>
               <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }}>
-                <label>Vechile-Number</label>
-                <input className="form-control" onChange={(e) => setVechileNumber(e.target.value)} />
+                <label>vehicle-Number</label>
+                <input className="form-control" onChange={(e) => setvehicleNumber(e.target.value)} />
               </Grid>
               <Grid item xs={6} sm={3} style={{}}>
                 <label>Company-Name</label>

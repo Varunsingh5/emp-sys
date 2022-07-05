@@ -6,7 +6,6 @@ import countryList from 'react-select-country-list'
 import { storage } from '../../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
 import { v4 } from 'uuid';
-import { async } from '@firebase/util';
 import { auth, db } from '../../../firebase';
 import Grid from '@mui/material/Grid';
 
@@ -29,7 +28,6 @@ const UserProfileSettings = () => {
   const [city,setCity] = useState("");
   const [country, setCountry] = useState("");
   const [details,setDetails]=useState([]);
-
   const [companyName, setCompanyName] = useState("");
   const [postGraduation, setPostGraduation] = useState("");
   const [marital, setMarital] = useState("");
@@ -44,10 +42,6 @@ const UserProfileSettings = () => {
   const [permanentAddress, setPermanentAddress] = useState("");
   const [permanentCity, setPermanentCity] = useState("");
   const [permanentCountry, setPermanentCountry] = useState("");
-
-
-
-
   const options = useMemo(() => countryList().getData(), [])
   const changeHandler = value => {
     setValue(value)
@@ -110,11 +104,9 @@ useEffect(() => {
                           {imageList.map((url) => {
                             return <img src={url} />
                           })}
-
                         </div>
                       </div>
-                     
-                      <div className="tab-content pt-3">
+                     <div className="tab-content pt-3">
                         <div className="tab-pane active">
                         <form className="form" novalidate=""  >
           <div >
@@ -236,15 +228,8 @@ useEffect(() => {
                                 </div>
                               </div>
                             </div>
-          </div>
-        </form>
-
-
-
-                        
-                          
-                           
-                        
+                         </div>
+                        </form>
                         </div>
                       </div>
                     </div>
