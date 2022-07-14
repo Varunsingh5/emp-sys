@@ -139,8 +139,8 @@ const UserTable = () => {
                 Schooling: "",
                 Graduation: "" ,
                 Address: "",
-               City: "",
-               Country: "",    
+                City: "",
+                Country: "",    
               })
                 .then((e) => {
                   console.log("error on doc add ", e)
@@ -332,6 +332,3 @@ const UserTable = () => {
   )
 }
 export default UserTable;
-
-
-

@@ -14,12 +14,11 @@ import { storage } from '../../../firebase';
 import { ref, getDownloadURL, uploadBytesResumable, list } from 'firebase/storage';
 import { v4 } from 'uuid';
 
-
 const UserDashboard = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-  const [finalData, setFinalData] = React.useState();
+  const [finalData, setFinalData] = useState();
   const [about, setAbout] = useState("");
   const [fatherName, setFatherName] = useState();
   const [motherName, setMotherName] = useState("");
@@ -49,7 +48,8 @@ const UserDashboard = () => {
    //image uploading
    const [imageUpload, setImageUpload] = useState(null);
    const [imageList, setImageList] = useState([]);
- 
+  
+
    const imageListRef = ref(storage, "images/")
    const uploadImage = () => {
      if (imageUpload == null) return;
@@ -111,10 +111,11 @@ const UserDashboard = () => {
 
   }
   useEffect(() => {
-   //loder true
+   //loader true
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
    if(currentuser){
      getProfile()
+     
    }
 
     });
@@ -128,8 +129,7 @@ const UserDashboard = () => {
     const data = userProfile.data();
     setFinalData(data);
   }
-
-
+    
   const formsubmit = async(e) => {
     e.preventDefault();
 
@@ -138,7 +138,7 @@ const UserDashboard = () => {
     const ref = doc(db, "userProfile", user.uid)
     const docSnap = await getDoc(ref);
     if (docSnap.exists()) {
-      alert("okjmoju")
+      alert("Alright")
         await updateDoc(doc(db, "userProfile", user.uid), {    
           isProfileSet: true,
           About: about,
@@ -167,6 +167,7 @@ const UserDashboard = () => {
           PermanentAddress: permanentAddress,
           PermanentCity: permanentCity,
           PermanentCountry: permanentCountry,
+          ImageUpload: imageList,
         })
     } else {
       console.log("No such document!");
@@ -258,6 +259,13 @@ const UserDashboard = () => {
         <Box sx={customStyles}>
         <form className="form" novalidate="" onSubmit={formsubmit}>
           <div >
+          <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }} >
+            <input type="file" onChange={(event => { setImageUpload(event.target.files[0]) })} />
+                          <button onClick={uploadImage}>Upload Image</button>
+                          {imageList.map((url) => {
+                            return <img src={url} />
+                })}       
+            </Grid>
             <Grid container spacing={3}>
               <Grid item xs={6} sm={3} style={{ marginLeft: "15%" }} >
                 <label>Adhaar</label>
@@ -389,7 +397,7 @@ export default UserDashboard;
 
     //if doc contains (isprofile is false then open model to set profile)
 
-    // after filling all fields in modal click submit     update doc in user profile collection  do isprofile(true)
+    // after filling all fields in modal click submit update doc in user profile collection  do isprofile(true)
 
 
     // else isprofile true then donot do any thing and return null
